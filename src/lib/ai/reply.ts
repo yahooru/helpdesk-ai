@@ -208,6 +208,11 @@ export async function runAiReply(conversationId: string, visitorMessageRowId: st
     .limit(1);
   if (!latest || latest.id !== visitorMessageRowId) return;
 
+  // Everything below is sent into the conversation's group, which must exist in the current app.
+  await ensureConversationChannel(workspace, conversation).catch((err) =>
+    console.warn("[ai] conversation provisioning failed", err instanceof Error ? err.message : err),
+  );
+
   if (!workspace.aiEnabled) {
     await requestHandoff(workspace, conversation, "ai_disabled");
     return;
@@ -241,8 +246,6 @@ export async function runAiReply(conversationId: string, visitorMessageRowId: st
     return;
   }
 
-  // Everything below is sent into the conversation's group, which must exist in the current app.
-  await ensureConversationChannel(workspace, conversation);
   await sendBotTyping(workspace, conversation);
   const history = await loadHistory(conversationId);
   const prior = history.slice(0, -1);

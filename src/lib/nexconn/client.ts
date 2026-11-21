@@ -185,9 +185,13 @@ function registerHandlers(s: Sdk) {
         else if (status === ConnectionStatus.SUSPENDED) setState("reconnecting", code);
         else if (status === ConnectionStatus.DISCONNECTED) {
           if (code === 31010) setState("kicked", code);
-          else if (code === 31004) void reconnectWithFreshToken();
-          else if (code === 33007) void manualReconnect();
-          else setState(hadConnected ? "reconnecting" : "offline", code);
+          else if (code === 31004 || code === 31005) void reconnect(true);
+          else if (code === 33007) void reconnect(false);
+          else if (credentialFetcher) {
+            // The SDK stops retrying after other disconnect codes; back off and connect again.
+            setState("error", code);
+            scheduleRetry();
+          } else setState("idle", code);
         }
       },
     }),
@@ -215,7 +219,7 @@ function registerHandlers(s: Sdk) {
           emit("onMessage", normalized);
           if (m.messageType === NC_TYPES.stream && normalized.streaming) {
             // Ask the server for the rest of the stream; chunks arrive via onStreamMessageRequestDelta.
-            void m.requestStreamMessage().catch(() => undefined);
+            void requestStream(m);
           }
         }
       },
@@ -260,33 +264,63 @@ async function attachStream(s: Sdk, channelId: string, messageId: string) {
     if (!m) return;
     const normalized = normalize(m);
     emit("onMessage", normalized);
-    if (normalized.streaming) await m.requestStreamMessage();
+    if (normalized.streaming) await requestStream(m);
   } catch (err) {
     console.warn("[chat] stream attach failed", err);
   }
 }
 
-async function reconnectWithFreshToken() {
-  if (!credentialFetcher || !sdk) return;
-  try {
-    setState("reconnecting");
-    const creds = await credentialFetcher(true);
-    const res = await sdk.NCEngine.connect({ token: creds.token });
-    if (!res.isOk) setState("error", res.code);
-  } catch {
-    setState("error");
-  }
+/**
+ * requestStreamMessage resolves with a result instead of throwing. When streaming is unavailable
+ * (39001) the answer still arrives: the server writes the final text into the message metadata.
+ */
+async function requestStream(m: Message) {
+  const res = await m.requestStreamMessage().catch(() => null);
+  if (res && !res.isOk) console.warn("[chat] live stream unavailable, waiting for the final answer", res.code);
 }
 
-async function manualReconnect() {
-  if (!credentialFetcher || !sdk) return;
-  try {
-    const creds = await credentialFetcher(false);
-    const res = await sdk.NCEngine.connect({ token: creds.token });
-    if (!res.isOk) setState("error", res.code);
-  } catch {
-    setState("error");
+/** True when a token belongs to another Nexconn app (31005) or has expired (31004). */
+function needsFreshToken(code?: number) {
+  return code === 31004 || code === 31005;
+}
+
+/** Credentials for a different App Key need a fresh SDK instance: initialize runs once per page. */
+function reloadIfAppChanged(appKey: string) {
+  if (initializedKey && initializedKey !== appKey) {
+    window.location.reload();
+    return true;
   }
+  return false;
+}
+
+/** Reconnects after the SDK gave up (expired token, 33007). Shares the in-flight connect. */
+function reconnect(refresh: boolean): Promise<void> {
+  if (!credentialFetcher || !sdk) return Promise.resolve();
+  if (connectPromise) return connectPromise.catch(() => undefined);
+  const fetcher = credentialFetcher;
+  const s = sdk;
+  connectPromise = (async () => {
+    setState("reconnecting");
+    const creds = await fetcher(refresh);
+    if (reloadIfAppChanged(creds.appKey)) return;
+    const res = await s.NCEngine.connect({ token: creds.token });
+    if (!res.isOk) {
+      setState(res.code === 31010 ? "kicked" : "error", res.code);
+      throw new Error(`Chat reconnect failed (${res.code})`);
+    }
+    retryAttempt = 0;
+    setState("connected");
+  })()
+    .catch(() => {
+      if (state !== "kicked") {
+        if (state !== "error") setState("error");
+        scheduleRetry();
+      }
+    })
+    .finally(() => {
+      connectPromise = null;
+    });
+  return connectPromise;
 }
 
 /**
@@ -315,6 +349,7 @@ export function connectChat(fetchCredentials: (refresh: boolean) => Promise<Chat
     setState("connecting");
     sdk = sdk ?? (await import("@nexconn/chat"));
     let creds = await fetchCredentials(false);
+    if (reloadIfAppChanged(creds.appKey)) return;
     if (initializedKey !== creds.appKey) {
       sdk.NCEngine.initialize({ appKey: creds.appKey, areaCode: sdk.AreaCode.SG, logLevel: sdk.LogLevel.WARN });
       sdk.NCEngine.registerCustomMessages([
@@ -329,7 +364,7 @@ export function connectChat(fetchCredentials: (refresh: boolean) => Promise<Chat
       initializedKey = creds.appKey;
     }
     let res = await sdk.NCEngine.connect({ token: creds.token });
-    if (!res.isOk && res.code === 31004) {
+    if (!res.isOk && needsFreshToken(res.code)) {
       creds = await fetchCredentials(true);
       res = await sdk.NCEngine.connect({ token: creds.token });
     }
@@ -357,13 +392,17 @@ export function connectChat(fetchCredentials: (refresh: boolean) => Promise<Chat
 
 export async function disconnectChat() {
   if (!sdk) return;
+  credentialFetcher = null;
+  if (retryTimer) clearTimeout(retryTimer);
+  retryTimer = null;
   await sdk.NCEngine.disconnect().catch(() => undefined);
   hadConnected = false;
   setState("idle");
 }
 
 async function ensureConnected() {
-  if (state === "connected" || !credentialFetcher) return;
+  // A session kicked by another tab stays signed out until the person chooses to use this tab.
+  if (state === "connected" || state === "kicked" || !credentialFetcher) return;
   await connectChat(credentialFetcher).catch(() => undefined);
 }
 
@@ -484,5 +523,8 @@ export async function subscribePresence(userIds: string[], onChange: (userId: st
   }
   return () => {
     s.NCEngine.removeUserHandler(handlerId);
+    void s.NCEngine.userModule
+      .unsubscribeEvent({ userIds: userIds.slice(0, 200), subscribeType: s.SubscribeType.ONLINE_STATUS })
+      .catch(() => undefined);
   };
 }
