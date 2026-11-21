@@ -1,5 +1,5 @@
 "use client";
-import { Angry, BookOpen, Bot, Check, Frown, Laugh, Lock, Meh, Send, Smile, UserRound } from "lucide-react";
+import { Angry, BookOpen, Bot, Check, Clock, Frown, Laugh, Lock, Meh, Send, Smile, Star, UserRound, type LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
@@ -97,161 +97,216 @@ export function HeroDemo() {
   const waited = assigned ? T.joined - T.queued : Math.max(0, t - T.queued);
   const fading = running && t > LOOP_MS - 700;
 
+  const stage = at(T.rated) ? 3 : assigned ? 2 : queued ? 1 : 0;
+
   return (
-    <div ref={rootRef} className="relative mx-auto w-full max-w-[690px]" aria-label="A customer conversation moving from the AI assistant to a person" role="img">
-      <div className={cn("relative h-[540px] transition-opacity duration-500 sm:h-[590px]", fading ? "opacity-0" : "opacity-100")} aria-hidden>
-        {/* The agent's side: the inbox, sitting behind the customer's chat. */}
-        <p className="absolute top-0 left-1 hidden text-xs font-medium text-muted sm:block">What your agent sees</p>
-        <p className="absolute top-0 right-1 hidden text-xs font-medium text-muted sm:block">What your customer sees</p>
-        <div className="absolute top-14 left-0 hidden w-[292px] overflow-hidden rounded-[16px] border border-line bg-surface shadow-md sm:block">
-          <div className="flex items-center justify-between border-b border-line px-4 py-3">
-            <span className="type-heading text-sm font-semibold">Inbox</span>
-            <span className="flex items-center gap-1.5 text-xs text-muted">
-              <span className="size-2 rounded-full bg-fern" /> Maya, available
-            </span>
-          </div>
-          <div className="flex gap-1 border-b border-line px-3 py-2 text-xs">
-            <span className={cn("flex items-center gap-1 rounded-full px-2 py-1 font-medium", queued ? "bg-ink text-white" : "text-muted")}>
-              Unassigned <span className="type-figures">{queued ? 1 : 0}</span>
-            </span>
-            <span className={cn("flex items-center gap-1 rounded-full px-2 py-1 font-medium", !queued ? "bg-ink text-white" : "text-muted")}>
-              Mine <span className="type-figures">{assigned ? 3 : 2}</span>
-            </span>
-          </div>
-          <ul className="divide-y divide-line text-sm">
-            {at(T.queued) ? (
-              <li key="casey" className={cn("pop-in px-4 py-3", queued ? "bg-brass-wash" : "bg-enamel-wash")}>
+    <div ref={rootRef} className="relative w-full" aria-label="A customer conversation moving from the AI assistant to a person" role="img">
+      <div className={cn("flex items-start justify-center gap-6 transition-opacity duration-500 lg:gap-10", fading ? "opacity-0" : "opacity-100")} aria-hidden>
+        {/* The agent's side: the inbox. */}
+        <div className="hidden w-[300px] shrink-0 md:block lg:mt-12">
+          <p className="mb-3 text-xs font-medium text-white/55">Agent&apos;s inbox</p>
+          <div className="overflow-hidden rounded-[16px] bg-surface text-left text-ink shadow-lg">
+            <div className="flex items-center justify-between border-b border-line px-4 py-3">
+              <span className="type-heading text-sm font-semibold">Inbox</span>
+              <span className="flex items-center gap-1.5 text-xs text-muted">
+                <span className="size-2 rounded-full bg-fern" /> Maya, available
+              </span>
+            </div>
+            <div className="flex gap-1 border-b border-line px-3 py-2 text-xs">
+              <span className={cn("flex items-center gap-1 rounded-full px-2 py-1 font-medium", queued ? "bg-ink text-white" : "text-muted")}>
+                Unassigned <span className="type-figures">{queued ? 1 : 0}</span>
+              </span>
+              <span className={cn("flex items-center gap-1 rounded-full px-2 py-1 font-medium", !queued ? "bg-ink text-white" : "text-muted")}>
+                Mine <span className="type-figures">{assigned ? 3 : 2}</span>
+              </span>
+            </div>
+            <ul className="divide-y divide-line text-sm">
+              {at(T.queued) ? (
+                <li key="casey" className={cn("pop-in px-4 py-3", queued ? "bg-brass-wash" : "bg-enamel-wash")}>
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold">Casey Morgan</span>
+                    {queued ? (
+                      <span className="type-figures flex items-center gap-1.5 rounded-full bg-surface px-2 py-0.5 text-xs font-semibold shadow-sm">
+                        <span className="waiting-pulse size-2 rounded-full bg-brass" />
+                        {clock(waited)}
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-xs font-medium text-enamel-strong">
+                        <span className="flex size-4 items-center justify-center rounded-full bg-enamel text-[9px] text-white">M</span>
+                        Assigned to you
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-0.5 truncate text-xs text-muted">Change the address on order 4821</p>
+                  <p className="mt-1.5 text-[11px] text-faint">{queued ? "Asked for a person" : `First reply in ${clock(T.reply - T.queued)}`}</p>
+                </li>
+              ) : null}
+              <li className="px-4 py-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold">Casey Morgan</span>
-                  {queued ? (
-                    <span className="type-figures flex items-center gap-1.5 rounded-full bg-surface px-2 py-0.5 text-xs font-semibold shadow-sm">
-                      <span className="waiting-pulse size-2 rounded-full bg-brass" />
-                      {clock(waited)}
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-xs font-medium text-enamel-strong">
-                      <span className="flex size-4 items-center justify-center rounded-full bg-enamel text-[9px] text-white">M</span>
-                      Assigned to you
-                    </span>
-                  )}
+                  <span className="font-semibold">Priya Nair</span>
+                  <span className="text-xs text-muted">4m</span>
                 </div>
-                <p className="mt-0.5 truncate text-xs text-muted">Change the address on order 4821</p>
-                <p className="mt-1.5 text-[11px] text-faint">{queued ? "Asked for a person" : `First reply in ${clock(T.reply - T.queued)}`}</p>
+                <p className="mt-0.5 truncate text-xs text-muted">Refund for a damaged helmet</p>
               </li>
-            ) : null}
-            <li className="px-4 py-3">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold">Priya Nair</span>
-                <span className="text-xs text-muted">4m</span>
-              </div>
-              <p className="mt-0.5 truncate text-xs text-muted">Refund for a damaged helmet</p>
-            </li>
-            <li className="px-4 py-3">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold">Jordan Lee</span>
-                <span className="rounded-full bg-fern-wash px-1.5 py-0.5 text-[10px] font-semibold text-fern">Resolved by AI</span>
-              </div>
-              <p className="mt-0.5 truncate text-xs text-muted">Which frame size fits 5&apos;10&quot;?</p>
-            </li>
-          </ul>
-          <div className="m-3 rounded-[10px] border border-dashed border-line-strong bg-wash px-3 py-2 text-xs text-muted">
-            <span className="flex items-center gap-1 font-medium text-ink">
-              <Lock className="size-3" /> Internal note
-            </span>
-            Casey is a repeat customer. Offer free express if it slips.
+              <li className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold">Jordan Lee</span>
+                  <span className="rounded-full bg-fern-wash px-1.5 py-0.5 text-[10px] font-semibold text-fern">Resolved by AI</span>
+                </div>
+                <p className="mt-0.5 truncate text-xs text-muted">Which frame size fits 5&apos;10&quot;?</p>
+              </li>
+            </ul>
+            <div className="m-3 rounded-[10px] border border-dashed border-[color:var(--brass-strong)] bg-brass-wash px-3 py-2 text-xs text-ink">
+              <span className="flex items-center gap-1 font-medium text-brass-strong">
+                <Lock className="size-3" /> Internal note
+              </span>
+              Casey is a repeat customer. Offer free express if it slips.
+            </div>
           </div>
         </div>
 
+        <Tracker stage={stage} waited={clock(waited)} />
+
         {/* The customer's side: the chat widget. */}
-        <div className="absolute top-0 right-0 bottom-0 flex w-full flex-col overflow-hidden rounded-[20px] border border-line bg-canvas shadow-lg sm:top-7 sm:w-[372px]">
-          <div className="flex items-center gap-3 bg-enamel px-4 py-3.5 text-white">
-            <span className="flex size-9 items-center justify-center rounded-full bg-white/18 text-sm font-semibold">N</span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold">Northwind Bikes</p>
-              <p className="flex items-center gap-1.5 text-xs text-white/80">
-                <span className="size-1.5 rounded-full bg-white" />
-                {assigned ? "You're chatting with Maya" : queued ? "Connecting you with the team" : "AI assistant replies in seconds"}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex min-h-0 flex-1 flex-col justify-end gap-3 overflow-hidden px-4 pt-4 pb-3 [mask-image:linear-gradient(to_bottom,transparent,black_56px)]">
-            <div className="flex items-end gap-2">
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-enamel text-white">
-                <Bot className="size-4" />
-              </span>
-              <p className="max-w-[80%] rounded-[14px] rounded-bl-[4px] border border-line bg-surface px-3.5 py-2.5 text-sm">
-                Hi there. Ask us anything. A person is one tap away.
-              </p>
+        <div className="w-full max-w-[380px] shrink-0">
+          <p className="mb-3 text-xs font-medium text-white/55">Customer&apos;s chat</p>
+          <div className="flex h-[500px] flex-col overflow-hidden rounded-[20px] bg-canvas text-left text-ink shadow-lg sm:h-[520px]">
+            <div className="flex items-center gap-3 bg-enamel px-4 py-3.5 text-white">
+              <span className="flex size-9 items-center justify-center rounded-full bg-white/18 text-sm font-semibold">N</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold">Northwind Bikes</p>
+                <p className="flex items-center gap-1.5 text-xs text-white/80">
+                  <span className="size-1.5 rounded-full bg-white" />
+                  {assigned ? "You're chatting with Maya" : queued ? "Connecting you with the team" : "AI assistant replies in seconds"}
+                </p>
+              </div>
             </div>
 
-            {at(T.ask1) ? <Mine key="a1" text="Do you ship to Canada?" /> : null}
-            {at(T.think1) && !at(T.answer1) ? <Thinking key="th1" /> : null}
-            {at(T.answer1) ? (
-              <Ai key="ans1" text={streamed(ANSWER_1, T.answer1, t)} source={t > T.answer1 + 1100 ? "Shipping and delivery" : null} />
-            ) : null}
-            {at(T.ask2) ? <Mine key="a2" text="Can you change the address on order 4821?" seen={at(T.seen)} /> : null}
-            {at(T.think2) && !at(T.answer2) ? <Thinking key="th2" /> : null}
-            {at(T.answer2) ? <Ai key="ans2" text={streamed(ANSWER_2, T.answer2, t)} /> : null}
-            {at(T.answer2 + 1100) && !at(T.queued) ? (
-              <div key="actions" className="pop-in flex gap-2 pl-0.5">
-                <span className="rounded-full border border-line-strong bg-surface px-3 py-1 text-xs font-medium">That helped</span>
-                <span
-                  className={cn(
-                    "rounded-full px-3 py-1 text-xs font-medium transition-all duration-200",
-                    at(T.press) ? "scale-95 bg-enamel text-white" : "border border-line-strong bg-surface",
-                  )}
-                >
-                  Talk to a person
+            <div className="flex min-h-0 flex-1 flex-col justify-end gap-3 overflow-hidden px-4 pt-4 pb-3 [mask-image:linear-gradient(to_bottom,transparent,black_56px)]">
+              <div className="flex items-end gap-2">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-enamel text-white">
+                  <Bot className="size-4" />
                 </span>
+                <p className="max-w-[80%] rounded-[14px] rounded-bl-[4px] border border-line bg-surface px-3.5 py-2.5 text-sm">
+                  Hi there. Ask us anything. A person is one tap away.
+                </p>
               </div>
-            ) : null}
-            {at(T.queued) ? <SystemLine key="q" text="Connecting you with a person from the team" /> : null}
-            {at(T.joined) ? <SystemLine key="j" text="Maya joined the conversation" /> : null}
-            {at(T.typing) && !at(T.reply) ? (
-              <p key="mt" className="pop-in flex items-center gap-2 text-xs text-muted">
-                <Dots /> Maya is typing
-              </p>
-            ) : null}
-            {at(T.reply) ? (
-              <div key="r" className="pop-in flex flex-col items-start">
-                <span className="mb-1 flex items-center gap-1 text-[11px] text-muted">
-                  <UserRound className="size-3" /> Maya
-                </span>
-                <p className="max-w-[85%] rounded-[14px] rounded-bl-[4px] bg-surface px-3.5 py-2.5 text-sm shadow-[inset_0_0_0_1px_var(--line-strong)]">{REPLY}</p>
-              </div>
-            ) : null}
-            {at(T.rating) ? (
-              <div key="csat" className="pop-in mx-auto w-full max-w-[290px] rounded-[12px] border border-line bg-surface px-3.5 py-3">
-                <p className="text-xs font-medium">{at(T.rated) ? "Thanks for your rating" : "How did we do?"}</p>
-                <div className="mt-2 flex justify-between gap-1">
-                  {FACES.map((Face, i) => (
-                    <span
-                      key={i}
-                      className={cn(
-                        "flex flex-1 items-center justify-center rounded-[8px] border py-1.5 transition-colors duration-300",
-                        at(T.rated) && i === 4 ? "border-enamel bg-enamel text-white" : "border-line text-muted",
-                      )}
-                    >
-                      <Face className="size-4" />
-                    </span>
-                  ))}
+
+              {at(T.ask1) ? <Mine key="a1" text="Do you ship to Canada?" /> : null}
+              {at(T.think1) && !at(T.answer1) ? <Thinking key="th1" /> : null}
+              {at(T.answer1) ? (
+                <Ai key="ans1" text={streamed(ANSWER_1, T.answer1, t)} source={t > T.answer1 + 1100 ? "Shipping and delivery" : null} />
+              ) : null}
+              {at(T.ask2) ? <Mine key="a2" text="Can you change the address on order 4821?" seen={at(T.seen)} /> : null}
+              {at(T.think2) && !at(T.answer2) ? <Thinking key="th2" /> : null}
+              {at(T.answer2) ? <Ai key="ans2" text={streamed(ANSWER_2, T.answer2, t)} /> : null}
+              {at(T.answer2 + 1100) && !at(T.queued) ? (
+                <div key="actions" className="pop-in flex gap-2 pl-0.5">
+                  <span className="rounded-full border border-line-strong bg-surface px-3 py-1 text-xs font-medium">That helped</span>
+                  <span
+                    className={cn(
+                      "rounded-full px-3 py-1 text-xs font-medium transition-all duration-200",
+                      at(T.press) ? "scale-95 bg-enamel text-white" : "border border-line-strong bg-surface",
+                    )}
+                  >
+                    Talk to a person
+                  </span>
                 </div>
-              </div>
-            ) : null}
-          </div>
+              ) : null}
+              {at(T.queued) ? <SystemLine key="q" text="Connecting you with a person from the team" /> : null}
+              {at(T.joined) ? <SystemLine key="j" text="Maya joined the conversation" /> : null}
+              {at(T.typing) && !at(T.reply) ? (
+                <p key="mt" className="pop-in flex items-center gap-2 text-xs text-muted">
+                  <Dots /> Maya is typing
+                </p>
+              ) : null}
+              {at(T.reply) ? (
+                <div key="r" className="pop-in flex flex-col items-start">
+                  <span className="mb-1 flex items-center gap-1 text-[11px] text-muted">
+                    <UserRound className="size-3" /> Maya
+                  </span>
+                  <p className="max-w-[85%] rounded-[14px] rounded-bl-[4px] bg-surface px-3.5 py-2.5 text-sm shadow-[inset_0_0_0_1px_var(--line-strong)]">{REPLY}</p>
+                </div>
+              ) : null}
+              {at(T.rating) ? (
+                <div key="csat" className="pop-in mx-auto w-full max-w-[290px] rounded-[12px] border border-line bg-surface px-3.5 py-3">
+                  <p className="text-xs font-medium">{at(T.rated) ? "Thanks for your rating" : "How did we do?"}</p>
+                  <div className="mt-2 flex justify-between gap-1">
+                    {FACES.map((Face, i) => (
+                      <span
+                        key={i}
+                        className={cn(
+                          "flex flex-1 items-center justify-center rounded-[8px] border py-1.5 transition-colors duration-300",
+                          at(T.rated) && i === 4 ? "border-enamel bg-enamel text-white" : "border-line text-muted",
+                        )}
+                      >
+                        <Face className="size-4" />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
 
-          <div className="border-t border-line bg-surface px-3 pt-2 pb-3">
-            <div className="flex items-center gap-2 rounded-[12px] border border-line-strong px-3 py-2 text-sm text-faint">
-              <span className="flex-1">Write a message</span>
-              <span className="flex size-7 items-center justify-center rounded-full bg-enamel text-white opacity-40">
-                <Send className="size-3.5" />
-              </span>
+            <div className="border-t border-line bg-surface px-3 pt-2 pb-3">
+              <div className="flex items-center gap-2 rounded-[12px] border border-line-strong px-3 py-2 text-sm text-faint">
+                <span className="flex-1">Write a message</span>
+                <span className="flex size-7 items-center justify-center rounded-full bg-enamel text-white opacity-40">
+                  <Send className="size-3.5" />
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+const STAGES: { icon: LucideIcon; label: string }[] = [
+  { icon: Bot, label: "AI answers" },
+  { icon: Clock, label: "Handoff" },
+  { icon: UserRound, label: "Maya joins" },
+  { icon: Star, label: "Rated 5/5" },
+];
+
+/** Between the two panels: where the conversation is right now. */
+function Tracker({ stage, waited }: { stage: number; waited: string }) {
+  return (
+    <ol className="hidden w-[118px] shrink-0 flex-col self-center lg:flex">
+      {STAGES.map((s, i) => {
+        const done = i < stage;
+        const now = i === stage;
+        const handoff = i === 1 && now;
+        return (
+          <li key={s.label} className="flex flex-col items-center text-center">
+            {i > 0 ? (
+              <span aria-hidden className="relative my-1.5 h-9 w-px overflow-hidden bg-white/15">
+                <span className={cn("absolute inset-0 origin-top bg-white/70 transition-transform duration-700", i <= stage ? "scale-y-100" : "scale-y-0")} />
+              </span>
+            ) : null}
+            <span
+              className={cn(
+                "flex size-10 items-center justify-center rounded-full border transition-all duration-500",
+                handoff
+                  ? "waiting-pulse scale-110 border-brass bg-brass text-ink"
+                  : now
+                    ? "scale-110 border-white bg-white text-ink"
+                    : done
+                      ? "border-white/40 bg-white/10 text-white"
+                      : "border-white/15 text-white/35",
+              )}
+            >
+              <s.icon className="size-[18px]" />
+            </span>
+            <span className={cn("mt-2 text-xs font-medium transition-colors duration-500", now ? "text-white" : done ? "text-white/60" : "text-white/35")}>
+              {s.label}
+            </span>
+            {i === 1 && stage >= 1 ? <span className="type-figures mt-0.5 text-[11px] text-brass">{waited}</span> : null}
+          </li>
+        );
+      })}
+    </ol>
   );
 }
 

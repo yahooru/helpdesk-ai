@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  ArrowRight,
   ArrowUpRight,
   BookOpen,
   Bot,
@@ -13,6 +14,7 @@ import {
   Lock,
   MessageSquareReply,
   Plus,
+  Search,
   Sparkles,
   UserRound,
 } from "lucide-react";
@@ -38,7 +40,7 @@ const NAV = [
 const JOURNEY = [
   {
     title: "A customer asks",
-    body: "From the chat launcher on your site, or your hosted support page. A name is all they give, and the conversation is still there when they come back.",
+    body: "From your site or your support page.",
     aside: (
       <div className="rounded-[14px] border border-line bg-surface p-3 shadow-sm">
         <p className="ml-auto w-fit max-w-[90%] rounded-[12px] rounded-br-[4px] bg-enamel px-3 py-2 text-sm text-white">What&apos;s your return window?</p>
@@ -46,11 +48,11 @@ const JOURNEY = [
     ),
   },
   {
-    title: "The assistant answers from your articles",
-    body: "The reply streams in within seconds and cites the article it used. If your articles don't cover it, it says so instead of guessing.",
+    title: "The AI answers",
+    body: "In seconds, citing your own article.",
     aside: (
       <div className="rounded-[14px] border border-line bg-surface p-3 text-sm shadow-sm">
-        <p>You can return unused items within 30 days for a full refund.</p>
+        <p>Unused items can be returned within 30 days.</p>
         <span className="mt-2 flex w-fit items-center gap-1 rounded-full border border-line-strong px-2 py-0.5 text-xs">
           <BookOpen className="size-3" aria-hidden /> <span className="type-figures font-semibold">1</span> Returns and refunds
         </span>
@@ -59,7 +61,7 @@ const JOURNEY = [
   },
   {
     title: "They ask for a person",
-    body: "One button, always in view, or just saying it. The conversation lands in Unassigned with a timer showing how long they've waited.",
+    body: "One tap. A waiting timer starts.",
     aside: (
       <div className="flex items-center justify-between rounded-[14px] border border-line bg-brass-wash p-3 text-sm shadow-sm">
         <span className="font-semibold">Alex Kim</span>
@@ -70,12 +72,12 @@ const JOURNEY = [
     ),
   },
   {
-    title: "Your agent joins the same chat",
-    body: "No new thread, no email chain. The customer sees who joined, when they're typing, and when their message was read.",
+    title: "An agent joins",
+    body: "Same chat, live. No starting over.",
     aside: (
       <div className="rounded-[14px] border border-line bg-surface p-3 text-sm shadow-sm">
         <p className="flex items-center gap-2 text-xs text-muted">
-          <span className="h-px flex-1 bg-line" /> Maya joined the conversation <span className="h-px flex-1 bg-line" />
+          <span className="h-px flex-1 bg-line" /> Maya joined <span className="h-px flex-1 bg-line" />
         </p>
         <p className="mt-2 flex items-center justify-end gap-1 text-xs text-faint">
           <Check className="size-3 text-fern" aria-hidden /> Seen
@@ -84,8 +86,8 @@ const JOURNEY = [
     ),
   },
   {
-    title: "Resolved, rated, and smarter next time",
-    body: "A rating card closes the loop. Questions the assistant couldn't answer become article drafts, written from what your agent actually said.",
+    title: "Resolved and rated",
+    body: "Unanswered questions become article drafts.",
     aside: (
       <div className="rounded-[14px] border border-line bg-surface p-3 text-sm shadow-sm">
         <p className="flex items-center gap-2 font-medium">
@@ -100,41 +102,26 @@ const JOURNEY = [
 ];
 
 const REALTIME = [
-  { api: "Group channels", body: "Every conversation is one live room. Agents join it, transfers move them in and out, and the customer never starts over." },
-  { api: "Streaming messages", body: "The assistant's answer appears as it's written, in the same message the customer keeps." },
-  { api: "Read receipts", body: "“Seen” under the customer's message the moment your agent reads it, and the other way round." },
-  { api: "Typing status", body: "Both sides see when the other is typing, including the assistant while it looks things up." },
-  { api: "Presence", body: "New conversations go round-robin to teammates who are actually online and available." },
-  { api: "Message metadata", body: "Citations, “That helped” and ratings travel on the message itself and update live." },
-  { api: "Media messages", body: "Screenshots and files in both directions, with upload progress." },
-  { api: "History", body: "Returning customers scroll back through their whole conversation, page by page." },
+  { api: "Group channels", body: "One live room per conversation." },
+  { api: "Streaming", body: "Answers appear as they're written." },
+  { api: "Read receipts", body: "“Seen” on every message." },
+  { api: "Typing", body: "Both sides see it, the AI too." },
+  { api: "Presence", body: "Chats go to agents who are online." },
+  { api: "Metadata", body: "Sources and ratings ride on the message." },
+];
+
+const PIPELINE = [
+  { icon: FileText, label: "Your articles" },
+  { icon: Search, label: "Closest passages" },
+  { icon: Sparkles, label: "Gemini" },
+  { icon: BookOpen, label: "Answer + source" },
 ];
 
 const FAQ = [
-  {
-    q: "What does the assistant answer from?",
-    a: "Only the articles you add: FAQs you write in the app, text you paste, or .txt, .md and .pdf files you upload. Every answer cites the article it used, and customers can open it.",
-  },
-  {
-    q: "What happens when it doesn't know?",
-    a: "It says so plainly and offers a person, or hands the conversation to your team right away. You choose which in the assistant settings. Those questions also show up in Analytics so you can write the missing article.",
-  },
-  {
-    q: "Do I need a website?",
-    a: "No. Every help desk gets a hosted support page with the chat and your public articles. Link it from your email signature, social profiles or packaging.",
-  },
-  {
-    q: "How does a customer reach a person?",
-    a: "“Talk to a person” is always on screen, and asking in words (“can I speak to someone?”) works too. If nobody is online, the customer is told the team will reply in the same chat and can leave an email.",
-  },
-  {
-    q: "How do I add my team?",
-    a: "Settings, then Team: create an invite link for an admin or an agent. Links are single use and expire after seven days. Agents set themselves available or away, and only available, online agents receive new conversations.",
-  },
-  {
-    q: "What does it cost?",
-    a: "It's free to start, with no credit card. Create a help desk, add your answers and put it on your site in about five minutes.",
-  },
+  { q: "What does the AI answer from?", a: "Only the articles and files you add. Every answer cites its source." },
+  { q: "What if it doesn't know?", a: "It says so and offers a person, or hands off right away. Your choice." },
+  { q: "Do I need a website?", a: "No. Every help desk also gets a hosted support page." },
+  { q: "What does it cost?", a: "Free to start. No credit card." },
 ];
 
 export default async function Home() {
@@ -173,89 +160,86 @@ export default async function Home() {
       </StickyHeader>
 
       <main>
-        {/* Hero */}
+        {/* Hero: one statement, one line, one action, then the product doing its job. */}
         <section className="relative">
-          <div aria-hidden className="dot-grid absolute inset-x-0 top-0 h-[720px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-          <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-20 sm:px-6 lg:pt-20 lg:pb-28">
-            <h1 className="type-display max-w-5xl text-[2.6rem] font-semibold text-balance sm:text-6xl lg:text-[4.4rem]">
-              <span className="block">Answers in seconds.</span>
-              <span className="block">A person when it matters.</span>
+          <div aria-hidden className="dot-grid absolute inset-x-0 top-0 h-[560px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+          <div className="relative mx-auto max-w-6xl px-4 pt-10 text-center sm:px-6 lg:pt-14">
+            <Link
+              href="#realtime"
+              className="hero-line inline-flex items-center gap-2 rounded-full border border-line bg-surface py-1 pr-3 pl-1 text-sm text-muted shadow-sm transition-colors hover:text-ink"
+            >
+              <span className="flex items-center gap-1.5 rounded-full bg-ink px-2 py-0.5 text-xs font-medium text-white">
+                <span className="size-1.5 rounded-full bg-fern-wash" /> Live
+              </span>
+              Realtime on Nexconn
+            </Link>
+            <h1 className="type-display mx-auto mt-6 max-w-5xl text-[2.6rem] font-semibold text-balance sm:text-6xl lg:text-[4.6rem]">
+              <span className="hero-line block [animation-delay:80ms]">Answers in seconds.</span>
+              <span className="hero-line block [animation-delay:180ms]">A person when it matters.</span>
             </h1>
-            <div className="mt-10 grid items-start gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,690px)] lg:gap-12">
-              <div className="lg:pt-6">
-                <p className="max-w-md text-lg leading-relaxed text-muted">
-                  HelpDesk AI answers your customers from your own help articles, cites the source, and hands the same live chat to your
-                  team the moment someone asks for a person. Set it up in about five minutes.
-                </p>
-                <div className="mt-9 flex flex-wrap items-center gap-3">
-                  <Link
-                    href={primaryHref}
-                    className="inline-flex h-12 items-center rounded-[10px] bg-enamel px-6 text-base font-semibold text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_10px_24px_-10px_var(--enamel)] transition-[background-color,transform] hover:-translate-y-px hover:bg-enamel-strong"
-                  >
-                    {primaryLabel}
-                  </Link>
-                  <a
-                    href="#how-it-works"
-                    className="inline-flex h-12 items-center rounded-[10px] border border-line-strong bg-surface px-5 text-base font-medium shadow-sm transition-colors hover:bg-wash"
-                  >
-                    See how it works
-                  </a>
-                </div>
-                <ul className="mt-8 flex flex-col gap-2.5 text-sm text-muted">
-                  {["Free to start, no credit card", "Live on your site in about five minutes", "Works on any website, or none at all"].map((item) => (
-                    <li key={item} className="flex items-center gap-2">
-                      <Check className="size-4 text-fern" aria-hidden /> {item}
-                    </li>
-                  ))}
-                </ul>
+            <p className="hero-line mx-auto mt-5 max-w-2xl text-lg text-balance text-muted [animation-delay:280ms]">
+              AI answers from your help articles. Your team takes over in the same chat.
+            </p>
+            <div className="hero-line mt-8 flex flex-wrap justify-center gap-3 [animation-delay:380ms]">
+              <Link
+                href={primaryHref}
+                className="group inline-flex h-12 items-center gap-2 rounded-[10px] bg-enamel px-6 text-base font-semibold text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_10px_24px_-10px_var(--enamel)] transition-[background-color,transform] hover:-translate-y-px hover:bg-enamel-strong"
+              >
+                {primaryLabel}
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+              </Link>
+              <a
+                href="#how-it-works"
+                className="inline-flex h-12 items-center rounded-[10px] border border-line-strong bg-surface px-5 text-base font-medium shadow-sm transition-colors hover:bg-wash"
+              >
+                How it works
+              </a>
+            </div>
+          </div>
+
+          <div className="relative mx-auto mt-12 max-w-6xl px-4 pb-20 sm:px-6 lg:pb-28">
+            <div className="hero-line relative overflow-hidden rounded-[28px] bg-ink px-4 py-8 shadow-lg [animation-delay:500ms] sm:px-10 sm:py-12">
+              <div aria-hidden className="dot-grid-dark absolute inset-0" />
+              <div className="relative">
+                <HeroDemo />
               </div>
-              <HeroDemo />
             </div>
           </div>
         </section>
 
         {/* Install */}
         <section className="px-4 sm:px-6">
-          <div data-reveal className="relative mx-auto max-w-6xl overflow-hidden rounded-[24px] bg-ink text-white">
-            <div aria-hidden className="dot-grid-dark absolute inset-0" />
-            <div className="relative grid gap-10 px-6 py-12 sm:px-12 sm:py-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center">
-              <div>
-                <h2 className="type-display text-3xl font-semibold sm:text-4xl">The whole install is one line.</h2>
-                <p className="mt-4 max-w-md text-white/70">
-                  Paste it before the closing body tag of any website or site builder. It adds a chat launcher in the corner; the chat runs
-                  on its own, so it never slows your page or clashes with your styles.
-                </p>
-                <p className="mt-6 flex items-start gap-2 text-sm text-white/70">
-                  <Globe className="mt-0.5 size-4 shrink-0 text-brass" aria-hidden />
-                  <span>
-                    No website? You also get a hosted support page at <span className="font-mono whitespace-nowrap text-white">/s/your-business</span>
-                  </span>
-                </p>
+          <div data-reveal className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-center">
+            <div>
+              <h2 className="type-display text-3xl font-semibold sm:text-4xl">One line. Any website.</h2>
+              <p className="mt-4 flex items-center gap-2 text-sm text-muted">
+                <Globe className="size-4 shrink-0 text-enamel" aria-hidden />
+                No website? Use your hosted support page.
+              </p>
+            </div>
+            <div className="overflow-hidden rounded-[16px] border border-ink-line bg-ink text-white shadow-lg">
+              <div className="flex items-center justify-between border-b border-ink-line px-4 py-2.5">
+                <span className="flex items-center gap-1.5" aria-hidden>
+                  <span className="size-2.5 rounded-full bg-white/15" />
+                  <span className="size-2.5 rounded-full bg-white/15" />
+                  <span className="size-2.5 rounded-full bg-white/15" />
+                </span>
+                <CopyButton value={snippet} label="Copy" className="!h-7 !border-white/15 !bg-transparent !text-white hover:!bg-white/10" />
               </div>
-              <div className="overflow-hidden rounded-[14px] border border-ink-line bg-ink-raised">
-                <div className="flex items-center justify-between border-b border-ink-line px-4 py-2.5">
-                  <span className="flex items-center gap-1.5" aria-hidden>
-                    <span className="size-2.5 rounded-full bg-white/15" />
-                    <span className="size-2.5 rounded-full bg-white/15" />
-                    <span className="size-2.5 rounded-full bg-white/15" />
-                  </span>
-                  <CopyButton value={snippet} label="Copy" className="!h-7 !border-white/15 !bg-transparent !text-white hover:!bg-white/10" />
-                </div>
-                <pre className="scrollbar-thin overflow-x-auto px-5 py-5 font-mono text-[13px] leading-7 sm:text-sm">
-                  <code>
-                    <span className="text-white/50">&lt;script</span>
-                    {"\n  "}
-                    <span className="text-white/80">src=</span>
-                    <span className="text-brass">&quot;{origin}/widget.js&quot;</span>
-                    {"\n  "}
-                    <span className="text-white/80">data-workspace=</span>
-                    <span className="text-brass">&quot;your-business&quot;</span>
-                    {"\n  "}
-                    <span className="text-white/80">async</span>
-                    <span className="text-white/50">&gt;&lt;/script&gt;</span>
-                  </code>
-                </pre>
-              </div>
+              <pre className="scrollbar-thin overflow-x-auto px-5 py-5 font-mono text-[13px] leading-7 sm:text-sm">
+                <code>
+                  <span className="text-white/50">&lt;script</span>
+                  {"\n  "}
+                  <span className="text-white/80">src=</span>
+                  <span className="text-brass">&quot;{origin}/widget.js&quot;</span>
+                  {"\n  "}
+                  <span className="text-white/80">data-workspace=</span>
+                  <span className="text-brass">&quot;your-business&quot;</span>
+                  {"\n  "}
+                  <span className="text-white/80">async</span>
+                  <span className="text-white/50">&gt;&lt;/script&gt;</span>
+                </code>
+              </pre>
             </div>
           </div>
         </section>
@@ -264,10 +248,7 @@ export default async function Home() {
         <section id="how-it-works" className="scroll-mt-20">
           <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-16 lg:py-32">
             <div className="lg:sticky lg:top-28 lg:self-start" data-reveal>
-              <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">One conversation, start to finish.</h2>
-              <p className="mt-4 text-muted">
-                The customer never repeats themselves. The assistant, the handoff, your agent and the rating all happen in one live chat.
-              </p>
+              <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">One chat, start to finish.</h2>
             </div>
             <ScrollJourney steps={JOURNEY} />
           </div>
@@ -276,44 +257,24 @@ export default async function Home() {
         {/* Features by role */}
         <section id="features" className="scroll-mt-20 border-y border-line bg-surface">
           <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-28">
-            <div className="max-w-2xl" data-reveal>
-              <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">Built for everyone in the conversation.</h2>
-              <p className="mt-4 text-muted">The owner who sets it up, the agents who answer, and the customer who just wants their answer.</p>
-            </div>
-
+            <h2 className="type-display max-w-xl text-3xl font-semibold sm:text-[2.6rem]" data-reveal>
+              Built for everyone in the chat.
+            </h2>
             <div className="mt-16 flex flex-col gap-20">
               <FeatureRow
-                title="For the owner"
-                body="Teach it once, then see exactly where it needs help."
-                items={[
-                  "Write FAQs, paste text, or upload .txt, .md and .pdf files",
-                  "Choose the assistant's name, tone and when it hands off",
-                  "Brand color, logo and greeting on the widget and support page",
-                  "See AI-resolved vs handed off, first response time and ratings",
-                ]}
+                title="For owners"
+                items={["Upload FAQs, docs and PDFs", "Set the tone and handoff rules", "See what it couldn't answer"]}
                 visual={<OwnerVisual />}
               />
               <FeatureRow
                 reverse
                 title="For agents"
-                body="A focused inbox that shows who's been waiting longest."
-                items={[
-                  "Unassigned, Mine, All open and Resolved, with live counts",
-                  "Waiting timers that turn brass when a customer has waited too long",
-                  "Saved replies, AI-drafted replies you edit, and internal notes",
-                  "Claim, transfer, resolve and reopen without leaving the chat",
-                ]}
+                items={["Queues with waiting timers", "Notes, saved and suggested replies", "Claim, transfer, resolve"]}
                 visual={<AgentVisual />}
               />
               <FeatureRow
                 title="For customers"
-                body="An answer now, and a person whenever they want one."
-                items={[
-                  "Answers in seconds with the source article one tap away",
-                  "“Talk to a person” always in view, or just ask in words",
-                  "Typing, “Seen” and who joined, so nobody waits in the dark",
-                  "Screenshots and files, and their history when they come back",
-                ]}
+                items={["Answers with sources", "A person, any time", "Their history when they return"]}
                 visual={<CustomerVisual />}
               />
             </div>
@@ -322,54 +283,40 @@ export default async function Home() {
 
         {/* Realtime */}
         <section id="realtime" className="scroll-mt-20 bg-ink text-white">
-          <div className="relative mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-28">
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-              <div data-reveal>
-                <h2 className="type-display text-3xl font-semibold sm:text-4xl">Realtime by Nexconn. Grounded answers by Gemini.</h2>
-                <p className="mt-5 max-w-md text-white/70">
-                  Every conversation is a Nexconn group channel that the customer, the assistant and your agents share. Answers come from
-                  Gemini, retrieved only from your own articles.
-                </p>
-                <div className="mt-8 rounded-[14px] border border-ink-line bg-ink-raised p-5">
-                  <p className="flex items-center gap-2 text-sm font-semibold">
-                    <Sparkles className="size-4 text-brass" aria-hidden /> How an answer is made
-                  </p>
-                  <ol className="mt-4 flex flex-col gap-3 text-sm text-white/75">
-                    {[
-                      "Your articles are split into passages and embedded into a vector index.",
-                      "Each question pulls the closest passages, and only those reach the model.",
-                      "The model must cite a passage or reply that it doesn't know.",
-                      "The answer streams into the chat with its sources attached.",
-                    ].map((s, i) => (
-                      <li key={s} className="grid grid-cols-[1.5rem_1fr] gap-2">
-                        <span className="type-figures text-brass">{i + 1}</span>
-                        {s}
-                      </li>
-                    ))}
-                  </ol>
+          <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-28">
+            <h2 className="type-display max-w-2xl text-3xl font-semibold sm:text-4xl" data-reveal>
+              Realtime by Nexconn. Answers by Gemini.
+            </h2>
+            <ol className="mt-12 grid gap-3 sm:grid-cols-4" data-reveal>
+              {PIPELINE.map((p, i) => (
+                <li key={p.label} className="relative flex items-center gap-3 rounded-[14px] border border-ink-line bg-ink-raised px-4 py-4">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-white/8 text-brass">
+                    <p.icon className="size-[18px]" aria-hidden />
+                  </span>
+                  <span className="text-sm font-semibold">{p.label}</span>
+                  {i < PIPELINE.length - 1 ? (
+                    <ArrowRight aria-hidden className="absolute top-1/2 -right-[13px] z-10 hidden size-4 -translate-y-1/2 text-white/40 sm:block" />
+                  ) : null}
+                </li>
+              ))}
+            </ol>
+            <dl className="mt-3 grid gap-px overflow-hidden rounded-[16px] border border-ink-line bg-[color:var(--ink-line)] sm:grid-cols-2 lg:grid-cols-3" data-reveal>
+              {REALTIME.map((r) => (
+                <div key={r.api} className="bg-ink p-5 transition-colors hover:bg-ink-raised">
+                  <dt className="text-sm font-semibold">{r.api}</dt>
+                  <dd className="mt-1 text-sm text-white/60">{r.body}</dd>
                 </div>
-              </div>
-              <dl className="grid gap-px overflow-hidden rounded-[16px] border border-ink-line bg-[color:var(--ink-line)] sm:grid-cols-2" data-reveal>
-                {REALTIME.map((r) => (
-                  <div key={r.api} className="bg-ink p-5 transition-colors hover:bg-ink-raised">
-                    <dt className="text-sm font-semibold text-white">{r.api}</dt>
-                    <dd className="mt-1.5 text-sm leading-relaxed text-white/65">{r.body}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+              ))}
+            </dl>
           </div>
         </section>
 
         {/* FAQ */}
         <section id="faq" className="scroll-mt-20">
-          <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-16 lg:py-28">
-            <div data-reveal>
-              <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">Questions owners ask.</h2>
-              <p className="mt-4 text-muted">
-                Anything else? Create a help desk and try it on yourself. It takes about as long as reading this page.
-              </p>
-            </div>
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-24 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-16 lg:py-28">
+            <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]" data-reveal>
+              Questions.
+            </h2>
             <div className="divide-y divide-line border-y border-line" data-reveal>
               {FAQ.map((f) => (
                 <details key={f.q} className="group">
@@ -377,7 +324,7 @@ export default async function Home() {
                     {f.q}
                     <Plus className="faq-plus size-5 shrink-0 text-muted transition-transform duration-300" aria-hidden />
                   </summary>
-                  <p className="max-w-2xl pb-6 text-muted">{f.a}</p>
+                  <p className="pb-5 text-muted">{f.a}</p>
                 </details>
               ))}
             </div>
@@ -386,7 +333,10 @@ export default async function Home() {
 
         {/* Final call */}
         <section className="px-4 pb-24 sm:px-6">
-          <div data-reveal className="relative mx-auto flex max-w-6xl flex-col items-start gap-8 overflow-hidden rounded-[24px] bg-enamel px-6 py-14 text-white sm:px-12 lg:flex-row lg:items-center lg:justify-between">
+          <div
+            data-reveal
+            className="relative mx-auto flex max-w-6xl flex-col items-start gap-8 overflow-hidden rounded-[24px] bg-enamel px-6 py-14 text-white sm:px-12 lg:flex-row lg:items-center lg:justify-between"
+          >
             <BrandGlyph
               size={300}
               body="#fff"
@@ -394,105 +344,54 @@ export default async function Home() {
               button="var(--enamel)"
               className="pointer-events-none absolute -right-8 -bottom-20 rotate-[-8deg] opacity-[0.13]"
             />
-            <div className="relative max-w-xl">
-              <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">Open your help desk today.</h2>
-              <p className="mt-4 text-white/80">Name it, add your top questions, paste one line. The assistant handles the first answer; your team handles the rest.</p>
-            </div>
+            <h2 className="type-display relative text-3xl font-semibold sm:text-[2.6rem]">Open your help desk today.</h2>
             <Link
               href={primaryHref}
-              className="relative inline-flex h-12 shrink-0 items-center rounded-[10px] bg-white px-6 text-base font-semibold text-enamel-strong shadow-md transition-transform hover:-translate-y-px"
+              className="relative inline-flex h-12 shrink-0 items-center gap-2 rounded-[10px] bg-white px-6 text-base font-semibold text-enamel-strong shadow-md transition-transform hover:-translate-y-px"
             >
               {primaryLabel}
+              <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-line bg-surface">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
-          <div>
-            <BrandMark />
-            <p className="mt-3 max-w-xs text-sm text-muted">Customer support a small business can set up in five minutes.</p>
-          </div>
-          <FooterColumn
-            title="Product"
-            links={[
-              { href: "#how-it-works", label: "How it works" },
-              { href: "#features", label: "Features" },
-              { href: "#faq", label: "FAQ" },
-            ]}
-          />
-          <FooterColumn
-            title="Get started"
-            links={[
-              { href: "/signup", label: "Create your help desk" },
-              { href: "/login", label: "Sign in" },
-            ]}
-          />
-          <FooterColumn
-            title="Built with"
-            links={[
-              { href: "https://www.nexconn.ai", label: "Nexconn realtime chat", external: true },
-              { href: "https://ai.google.dev", label: "Gemini", external: true },
-            ]}
-          />
-        </div>
-        <div className="border-t border-line">
-          <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-faint sm:px-6">&copy; {new Date().getFullYear()} HelpDesk AI</p>
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between">
+          <BrandMark />
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+            <a href="#how-it-works" className="hover:text-ink">
+              How it works
+            </a>
+            <a href="#faq" className="hover:text-ink">
+              FAQ
+            </a>
+            <Link href="/login" className="hover:text-ink">
+              Sign in
+            </Link>
+            <a href="https://www.nexconn.ai" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-ink">
+              Nexconn <ArrowUpRight className="size-3.5" aria-hidden />
+            </a>
+          </nav>
+          <p className="text-xs text-faint">&copy; {new Date().getFullYear()} HelpDesk AI</p>
         </div>
       </footer>
     </div>
   );
 }
 
-function FooterColumn({ title, links }: { title: string; links: { href: string; label: string; external?: boolean }[] }) {
-  return (
-    <div>
-      <h3 className="text-sm font-semibold">{title}</h3>
-      <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
-        {links.map((l) => (
-          <li key={l.href}>
-            {l.external ? (
-              <a href={l.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-ink">
-                {l.label} <ArrowUpRight className="size-3.5" aria-hidden />
-              </a>
-            ) : (
-              <a href={l.href} className="hover:text-ink">
-                {l.label}
-              </a>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function FeatureRow({
-  title,
-  body,
-  items,
-  visual,
-  reverse,
-}: {
-  title: string;
-  body: string;
-  items: string[];
-  visual: React.ReactNode;
-  reverse?: boolean;
-}) {
+function FeatureRow({ title, items, visual, reverse }: { title: string; items: string[]; visual: React.ReactNode; reverse?: boolean }) {
   return (
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
       <div className={reverse ? "lg:order-2" : undefined} data-reveal>
         <h3 className="type-display text-2xl font-semibold sm:text-3xl">{title}</h3>
-        <p className="mt-3 text-lg text-muted">{body}</p>
-        <ul className="mt-7 flex flex-col gap-3.5">
+        <ul className="mt-6 flex flex-col gap-3">
           {items.map((item) => (
-            <li key={item} className="flex gap-3">
-              <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-enamel-wash text-enamel">
-                <Check className="size-3" aria-hidden />
+            <li key={item} className="flex items-center gap-3 text-lg">
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-enamel-wash text-enamel">
+                <Check className="size-3.5" aria-hidden />
               </span>
-              <span>{item}</span>
+              {item}
             </li>
           ))}
         </ul>
@@ -535,11 +434,11 @@ function OwnerVisual() {
       </div>
       <div className="ml-auto w-[88%] rounded-[14px] border border-line bg-surface p-4 shadow-md">
         <p className="flex items-center gap-2 text-sm font-semibold">
-          <Lightbulb className="size-4 text-brass-strong" /> Questions the assistant couldn&apos;t answer
+          <Lightbulb className="size-4 text-brass-strong" /> Couldn&apos;t answer
         </p>
         <div className="mt-3 flex items-center justify-between gap-3 rounded-[10px] bg-wash px-3 py-2.5 text-sm">
-          <span className="min-w-0 truncate">&ldquo;Do you price-match other shops?&rdquo;</span>
-          <span className="type-figures shrink-0 text-xs text-muted">asked 4 times</span>
+          <span className="min-w-0 truncate">&ldquo;Do you price-match?&rdquo;</span>
+          <span className="type-figures shrink-0 text-xs text-muted">4 times</span>
         </div>
         <span className="mt-3 inline-flex rounded-[8px] border border-line-strong px-2.5 py-1 text-xs font-medium">Write article</span>
       </div>
@@ -590,17 +489,17 @@ function AgentVisual() {
         </ul>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-[14px] border border-dashed border-line-strong bg-surface p-3.5 text-sm shadow-sm">
-          <p className="flex items-center gap-1.5 text-xs font-medium text-muted">
+        <div className="rounded-[14px] border border-dashed border-[color:var(--brass-strong)] bg-brass-wash p-3.5 text-sm shadow-sm">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-brass-strong">
             <Lock className="size-3" /> Internal note
           </p>
-          <p className="mt-1">Second bike from Sam this year. Expedite if it&apos;s late.</p>
+          <p className="mt-1">Second order this month. Expedite.</p>
         </div>
         <div className="rounded-[14px] border border-line bg-surface p-3.5 text-sm shadow-sm">
           <p className="flex items-center gap-1.5 text-xs font-medium text-enamel">
             <MessageSquareReply className="size-3" /> Suggested reply
           </p>
-          <p className="mt-1 text-muted">Your order left our warehouse on Tuesday and arrives Friday.</p>
+          <p className="mt-1 text-muted">It arrives Friday.</p>
         </div>
       </div>
     </div>
@@ -624,7 +523,7 @@ function CustomerVisual() {
             <Bot className="size-3" /> Larkspur Assistant (AI)
           </span>
           <div className="max-w-[88%] rounded-[12px] rounded-bl-[4px] border border-line bg-surface px-3 py-2">
-            Yes, on the top rack. Hand-wash the gold-rim range to keep the glaze bright.
+            Yes, on the top rack.
             <span className="mt-2 flex w-fit items-center gap-1 rounded-full border border-line-strong px-2 py-0.5 text-[11px]">
               <BookOpen className="size-3" /> <span className="type-figures font-semibold">1</span> Caring for your ceramics
             </span>
