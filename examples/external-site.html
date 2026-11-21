@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Northwind Bikes (example external site)</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; color: #222; background: #fff; }
+      header { padding: 20px 24px; border-bottom: 1px solid #ddd; }
+      main { max-width: 720px; margin: 0 auto; padding: 32px 24px 120px; line-height: 1.6; }
+      code { background: #f2f2f2; padding: 2px 4px; }
+    </style>
+  </head>
+  <body>
+    <header><strong>Northwind Bikes</strong></header>
+    <main>
+      <h1>An ordinary website on another domain</h1>
+      <p>
+        This page knows nothing about HelpDesk AI except the single script tag at the bottom. The tag injects
+        an iframe launcher in the corner; the chat inside talks to the help desk on its own origin.
+      </p>
+      <p>To try it with your workspace, replace the <code>src</code> origin and the <code>data-workspace</code> slug.</p>
+    </main>
+
+    <!-- HelpDesk AI: the whole install is this one line. -->
+    <script src="http://localhost:3101/widget.js" data-workspace="your-workspace-slug" async></script>
+  </body>
+</html>

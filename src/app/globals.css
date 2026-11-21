@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/*
+ * HelpDesk AI design tokens. Four colors only:
+ *   porcelain (canvas), ink (text), ledger (accent / actions), marker (attention: someone is waiting).
+ * Everything else is a tint or shade of those four via color-mix. No gradients.
+ */
+:root {
+  --porcelain: #f3f4f1;
+  --ink: #1d2622;
+  --ledger: #146c54;
+  --marker: #f2b531;
+
+  --surface: color-mix(in oklab, var(--porcelain) 30%, white);
+  --canvas: var(--porcelain);
+  --line: color-mix(in oklab, var(--ink) 13%, transparent);
+  --line-strong: color-mix(in oklab, var(--ink) 24%, transparent);
+  --muted: color-mix(in oklab, var(--ink) 64%, var(--porcelain));
+  --faint: color-mix(in oklab, var(--ink) 46%, var(--porcelain));
+  --wash: color-mix(in oklab, var(--ink) 5%, var(--porcelain));
+  --ledger-wash: color-mix(in oklab, var(--ledger) 10%, white);
+  --ledger-strong: color-mix(in oklab, var(--ledger) 82%, var(--ink));
+  --marker-wash: color-mix(in oklab, var(--marker) 26%, white);
+
+  /* Brand accent for customer-facing surfaces (overridden per workspace). */
+  --brand: var(--ledger);
+  --brand-ink: white;
+}
+
+@theme inline {
+  --color-porcelain: var(--porcelain);
+  --color-ink: var(--ink);
+  --color-ledger: var(--ledger);
+  --color-ledger-strong: var(--ledger-strong);
+  --color-ledger-wash: var(--ledger-wash);
+  --color-marker: var(--marker);
+  --color-marker-wash: var(--marker-wash);
+  --color-surface: var(--surface);
+  --color-canvas: var(--canvas);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-wash: var(--wash);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-code), ui-monospace, SFMono-Regular, monospace;
+
+  /* Type scale (1.2 minor third from 15px body). */
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.62rem;
+  --text-3xl: 1.944rem;
+  --text-4xl: 2.333rem;
+  --text-5xl: 3.2rem;
+
+  --radius-control: 6px;
+  --radius-panel: 10px;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  font-variation-settings: "wdth" 100;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Expanded width for display type: the signage voice of the product. */
+.type-display {
+  font-variation-settings: "wdth" 118;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+}
+.type-heading {
+  font-variation-settings: "wdth" 108;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+/* Condensed tabular figures for timers and counts. */
+.type-figures {
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: "wdth" 88;
+}
+
+/* In the base layer so utilities (focus-visible:outline-none on inner textareas) can override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ledger);
+    outline-offset: 2px;
+  }
+}
+
+::selection {
+  background: var(--marker-wash);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes hd-typing {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+.typing-dot {
+  animation: hd-typing 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes hd-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: hd-rise 0.22s ease-out both;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
