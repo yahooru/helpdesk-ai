@@ -112,9 +112,9 @@ export default async function SupportPage({ params, searchParams }: { params: Pr
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 text-sm text-muted sm:px-6">
           <span>&copy; {new Date().getFullYear()} {workspace.name}</span>
-          <a href="/" className="inline-flex items-center gap-1.5 hover:text-ink">
+          <Link href="/" className="inline-flex items-center gap-1.5 hover:text-ink">
             <BrandGlyph size={16} /> Runs on HelpDesk AI
-          </a>
+          </Link>
         </div>
       </footer>
     </div>

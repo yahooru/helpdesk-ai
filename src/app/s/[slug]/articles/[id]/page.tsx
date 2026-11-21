@@ -60,9 +60,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </main>
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-3xl items-center justify-end px-4 py-5 text-sm text-muted sm:px-6">
-          <a href="/" className="inline-flex items-center gap-1.5 hover:text-ink">
+          <Link href="/" className="inline-flex items-center gap-1.5 hover:text-ink">
             <BrandGlyph size={16} /> Runs on HelpDesk AI
-          </a>
+          </Link>
         </div>
       </footer>
     </div>
