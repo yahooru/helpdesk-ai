@@ -4,6 +4,7 @@ import { notes } from "@/lib/db/schema";
 import { requireStaff } from "@/lib/auth/guards";
 import { getConversation } from "@/lib/conversations/service";
 import { json, parseJson, route } from "@/lib/http";
+import { ensureStaffChannel } from "@/lib/nexconn/provision";
 import { sendGroupMessage } from "@/lib/nexconn/server";
 import { HD_TYPES, type NoteContent } from "@/lib/nexconn/types";
 
@@ -20,11 +21,15 @@ export const POST = route(async (req: Request, ctx: { params: Promise<{ id: stri
     .values({ conversationId: conversation.id, workspaceId: workspace.id, authorId: user.id, body: text })
     .returning();
   const content: NoteContent = { conversationId: conversation.id, noteId: note.id, text, authorName: user.name };
-  await sendGroupMessage({
-    fromUserId: user.nexconnUserId,
-    channelId: workspace.staffChannelId,
-    messageType: HD_TYPES.note,
-    content,
-  }).catch((err) => console.warn("[notes] staff broadcast failed", err instanceof Error ? err.message : err));
+  await ensureStaffChannel(workspace)
+    .then(() =>
+      sendGroupMessage({
+        fromUserId: user.nexconnUserId,
+        channelId: workspace.staffChannelId,
+        messageType: HD_TYPES.note,
+        content,
+      }),
+    )
+    .catch((err) => console.warn("[notes] staff broadcast failed", err instanceof Error ? err.message : err));
   return json({ note: { id: note.id, body: note.body, createdAt: note.createdAt, authorId: user.id, authorName: user.name } }, 201);
 });

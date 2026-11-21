@@ -17,7 +17,8 @@ export const GET = route(async (req: Request) => {
   return json({
     visitor: { id: visitor.id, name: visitor.name, email: visitor.email, nexconnUserId: visitor.nexconnUserId },
     workspaceSlug: workspace.slug,
-    conversations,
+    // The assignee is an internal teammate id; customers only need the conversation itself.
+    conversations: conversations.map(({ assigneeId, ...c }) => (void assigneeId, c)),
   });
 });
 

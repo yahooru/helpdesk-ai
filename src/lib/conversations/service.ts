@@ -13,6 +13,7 @@ import {
   type Workspace,
 } from "@/lib/db/schema";
 import { HttpError } from "@/lib/auth/guards";
+import { ensureConversationChannel, ensureStaffChannel } from "@/lib/nexconn/provision";
 import {
   isUserOnline,
   joinGroup,
@@ -36,6 +37,7 @@ export function preview(text: string, max = 140): string {
 /** Fire-and-forget live inbox event on the workspace staff channel. Never throws. */
 export async function emitInbox(workspace: Workspace, event: InboxEventContent) {
   try {
+    await ensureStaffChannel(workspace);
     await sendStaffEvent({ botUserId: workspace.botUserId, staffChannelId: workspace.staffChannelId, event });
   } catch (err) {
     console.warn("[inbox] staff event failed", err instanceof Error ? err.message : err);
@@ -106,6 +108,7 @@ export async function sendConversationEvent(
   const content: ConversationEventContent = { kind, text, actorName, conversationId: conversation.id };
   let messageId: string | undefined;
   try {
+    await ensureConversationChannel(workspace, conversation);
     messageId = await sendGroupMessage({
       fromUserId: workspace.botUserId,
       channelId: conversation.channelId,
@@ -195,6 +198,7 @@ export async function anyTeammateOnline(workspace: Workspace): Promise<boolean> 
 }
 
 async function assignTo(workspace: Workspace, conversation: Conversation, agent: AgentPick, how: "claimed" | "auto") {
+  await ensureConversationChannel(workspace, conversation);
   await joinGroup(conversation.channelId, [agent.nexconnUserId]);
   const [updated] = await db()
     .update(conversations)
@@ -262,7 +266,16 @@ export async function claimConversation(
     .where(and(eq(conversations.id, conversation.id), isNull(conversations.assigneeId)))
     .returning();
   if (!locked) throw new HttpError(409, "A teammate already took this conversation", "already_assigned");
-  return assignTo(workspace, locked, { userId: agent.id, name: agent.name, nexconnUserId: agent.nexconnUserId }, "claimed");
+  try {
+    return await assignTo(workspace, locked, { userId: agent.id, name: agent.name, nexconnUserId: agent.nexconnUserId }, "claimed");
+  } catch (err) {
+    // Joining the chat failed: release the claim so the conversation doesn't look taken.
+    await db()
+      .update(conversations)
+      .set({ assigneeId: null })
+      .where(and(eq(conversations.id, conversation.id), eq(conversations.assigneeId, agent.id), ne(conversations.status, "assigned")));
+    throw err;
+  }
 }
 
 export async function transferConversation(
@@ -290,6 +303,7 @@ export async function transferConversation(
       .limit(1);
     previousNexconnId = prev?.nexconnUserId ?? null;
   }
+  await ensureConversationChannel(workspace, conversation);
   await joinGroup(conversation.channelId, [target.nexconnUserId]);
   if (previousNexconnId) await leaveGroup(conversation.channelId, [previousNexconnId]);
   const [updated] = await db()
@@ -332,6 +346,7 @@ export async function resolveConversation(
   );
   let csatMessageId: string | undefined;
   try {
+    await ensureConversationChannel(workspace, updated);
     csatMessageId = await sendGroupMessage({
       fromUserId: workspace.botUserId,
       channelId: updated.channelId,

@@ -3,6 +3,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { conversations, messages, workspaces, type Conversation, type MessageSource, type Workspace } from "@/lib/db/schema";
 import { rateLimit } from "@/lib/rate-limit";
+import { ensureConversationChannel } from "@/lib/nexconn/provision";
 import {
   sendGroupMessage,
   sendGroupStreamChunk,
@@ -45,13 +46,16 @@ async function loadHistory(conversationId: string, limit = 14): Promise<HistoryI
 
 /**
  * Streams model output into one Nexconn RC:StreamMsg. Chunks are coalesced (>= 280 ms apart) to
- * stay well inside Platform API rate limits. Returns the Nexconn message id.
+ * stay well inside Platform API rate limits. Returns the Nexconn message id. If the first chunk
+ * comes back without a message id, later chunks could not be attached to it, so the writer stops
+ * streaming and sends the whole answer as one ordinary message instead.
  */
 class NexconnStreamWriter {
   private seq = 0;
   private messageId: string | undefined;
   private pending = "";
   private lastSent = 0;
+  private unstreamed = false;
   text = "";
 
   constructor(
@@ -67,11 +71,13 @@ class NexconnStreamWriter {
   async write(delta: string) {
     this.pending += delta;
     this.text += delta;
+    if (this.unstreamed) return;
     if (Date.now() - this.lastSent >= 280 || this.pending.length > 400) await this.flush(false);
   }
 
   private async flush(complete: boolean) {
     if (!complete && !this.pending) return;
+    if (this.unstreamed) return;
     this.seq += 1;
     const content = this.pending;
     this.pending = "";
@@ -87,6 +93,11 @@ class NexconnStreamWriter {
       },
       ...(this.messageId ? {} : { metadata: { answer: "streaming" } }),
     });
+    if (!this.messageId && !id) {
+      console.warn("[ai] stream start returned no message id; sending the answer as one message");
+      this.unstreamed = true;
+      return;
+    }
     if (!this.messageId && id) {
       this.messageId = id;
       // The Web SDK does not push RC:StreamMsg through onMessageReceived; announce it so clients
@@ -102,7 +113,17 @@ class NexconnStreamWriter {
   }
 
   async complete() {
-    await this.flush(true);
+    if (!this.unstreamed) await this.flush(true);
+    if (this.unstreamed) {
+      this.messageId = await sendGroupMessage({
+        fromUserId: this.workspace.botUserId,
+        channelId: this.channelId,
+        messageType: NC_TYPES.text,
+        content: { content: this.text.trim() },
+        pushContent: this.text.trim().slice(0, 80),
+        metadata: { answer: "text" },
+      });
+    }
     return this.messageId;
   }
 }
@@ -220,6 +241,8 @@ export async function runAiReply(conversationId: string, visitorMessageRowId: st
     return;
   }
 
+  // Everything below is sent into the conversation's group, which must exist in the current app.
+  await ensureConversationChannel(workspace, conversation);
   await sendBotTyping(workspace, conversation);
   const history = await loadHistory(conversationId);
   const prior = history.slice(0, -1);

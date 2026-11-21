@@ -19,7 +19,13 @@ export const POST = route(async (_req: Request, ctx: { params: Promise<{ token: 
     .where(and(eq(invites.id, found.invite.id), isNull(invites.acceptedAt)))
     .returning({ id: invites.id });
   if (claimed.length === 0) throw new HttpError(409, "This invite was just used.", "invite_used");
-  await addMember(found.workspace, user, found.invite.role);
+  try {
+    await addMember(found.workspace, user, found.invite.role);
+  } catch (err) {
+    // Joining failed (for example Nexconn was unreachable): give the invite back so the link still works.
+    await db().update(invites).set({ acceptedAt: null }).where(eq(invites.id, found.invite.id));
+    throw err;
+  }
   await setWorkspaceCookie(found.workspace.id);
   return json({ ok: true, workspace: { id: found.workspace.id, name: found.workspace.name } });
 });
