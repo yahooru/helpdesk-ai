@@ -54,7 +54,7 @@ function IntroForm({ chat }: { chat: CustomerChatState }) {
       <p className="text-sm font-medium">Before we start, what&apos;s your name?</p>
       {err ? (
         <p role="alert" className="text-sm text-ink">
-          <span className="mr-1.5 inline-block size-2 rounded-full bg-marker align-middle" aria-hidden />
+          <span className="mr-1.5 inline-block size-2 rounded-full bg-brass align-middle" aria-hidden />
           {err}
         </p>
       ) : null}
@@ -316,7 +316,7 @@ export function CustomerChat({
       </header>
 
       {chat.connection === "reconnecting" || chat.connection === "offline" || chat.connection === "error" ? (
-        <p role="status" className="bg-marker px-4 py-1 text-center text-xs font-medium text-ink">
+        <p role="status" className="bg-brass px-4 py-1 text-center text-xs font-medium text-ink">
           {chat.connection === "error" ? "Chat couldn't connect. Messages will send when it recovers." : "Reconnecting…"}
         </p>
       ) : null}
@@ -451,7 +451,7 @@ export function CustomerChat({
         <footer className="border-t border-line bg-surface px-3 pt-2 pb-3">
           {chat.error ? (
             <p role="alert" className="mb-2 flex items-start gap-1.5 text-xs text-ink">
-              <span className="mt-1 inline-block size-2 shrink-0 rounded-full bg-marker" aria-hidden />
+              <span className="mt-1 inline-block size-2 shrink-0 rounded-full bg-brass" aria-hidden />
               <span className="flex-1">{chat.error}</span>
               <button type="button" onClick={() => chat.setError(null)} aria-label="Dismiss" className="text-muted">
                 <X className="size-3.5" />

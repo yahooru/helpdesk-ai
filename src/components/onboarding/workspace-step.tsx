@@ -139,7 +139,7 @@ export function WorkspaceStep() {
           error={slugState.available === false ? slugState.reason : null}
           hint={slugState.checking ? "Checking…" : slugState.available ? "Available" : "Lowercase letters, digits and dashes."}
         >
-          <div className="flex items-stretch overflow-hidden rounded-[var(--radius-control)] border border-line-strong bg-surface focus-within:border-ledger">
+          <div className="flex items-stretch overflow-hidden rounded-[var(--radius-control)] border border-line-strong bg-surface focus-within:border-enamel">
             <span className="flex items-center border-r border-line bg-wash px-3 text-sm text-muted">/s/</span>
             <input
               id="ws-slug"

@@ -1,11 +1,11 @@
 /**
  * Curated widget brand colors. Each passes WCAG AA (>= 4.5:1) for white text, so the widget can
- * use one brand accent + the neutral ink/porcelain pair and stay within the 3-4 color rule.
+ * use one brand accent + the neutral ink/porcelain pair. Enamel is the product's own blue.
  */
 export const BRAND_SWATCHES = [
+  { name: "Enamel", hex: "#2747C8" },
   { name: "Ledger", hex: "#146C54" },
   { name: "Harbor", hex: "#0E6378" },
-  { name: "Cobalt", hex: "#2446B8" },
   { name: "Plum", hex: "#6B2E63" },
   { name: "Brick", hex: "#A33A2B" },
   { name: "Umber", hex: "#7E5214" },
@@ -13,10 +13,14 @@ export const BRAND_SWATCHES = [
   { name: "Ink", hex: "#1E2925" },
 ] as const;
 
+/** Colors offered by earlier versions; still accepted so existing workspaces can save settings. */
+const LEGACY_BRAND_COLORS = ["#2446B8"];
+
 export const DEFAULT_BRAND = BRAND_SWATCHES[0].hex;
 
 export function isBrandColor(hex: string): boolean {
-  return BRAND_SWATCHES.some((s) => s.hex.toLowerCase() === hex.toLowerCase());
+  const value = hex.toLowerCase();
+  return BRAND_SWATCHES.some((s) => s.hex.toLowerCase() === value) || LEGACY_BRAND_COLORS.some((c) => c.toLowerCase() === value);
 }
 
 function channel(v: number): number {

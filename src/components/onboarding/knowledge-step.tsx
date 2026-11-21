@@ -19,7 +19,7 @@ export function KnowledgeStep({ existing }: { existing: AddedArticle[] }) {
               {items.map((a) => (
                 <li key={a.id} className="flex items-start gap-2 px-3 py-2.5 text-sm">
                   {a.indexStatus === "ready" ? (
-                    <CircleCheck className="mt-0.5 size-4 shrink-0 text-ledger" aria-label="Ready" />
+                    <CircleCheck className="mt-0.5 size-4 shrink-0 text-enamel" aria-label="Ready" />
                   ) : (
                     <CircleAlert className="mt-0.5 size-4 shrink-0 text-ink" aria-label="Needs attention" />
                   )}
@@ -35,7 +35,7 @@ export function KnowledgeStep({ existing }: { existing: AddedArticle[] }) {
         <div className="flex flex-col gap-2 border-t border-line pt-4">
           <Link
             href="/onboarding?step=install"
-            className="inline-flex h-10 items-center justify-center rounded-[var(--radius-control)] bg-ledger px-4 text-sm font-medium text-white hover:bg-ledger-strong"
+            className="inline-flex h-10 items-center justify-center rounded-[var(--radius-control)] bg-enamel px-4 text-sm font-medium text-white hover:bg-enamel-strong"
           >
             {items.length ? "Continue to install" : "Skip for now"}
           </Link>

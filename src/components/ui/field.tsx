@@ -2,7 +2,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAt
 import { cn } from "@/lib/cn";
 
 const control =
-  "w-full rounded-[var(--radius-control)] border border-line-strong bg-surface px-3 text-base text-ink placeholder:text-faint transition-colors hover:border-[color:var(--faint)] focus:border-ledger focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-ledger aria-[invalid=true]:border-ink disabled:opacity-60";
+  "w-full rounded-[var(--radius-control)] border border-line-strong bg-surface px-3 text-base text-ink placeholder:text-faint transition-colors hover:border-[color:var(--faint)] focus:border-enamel focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-enamel aria-[invalid=true]:border-ink disabled:opacity-60";
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Input(
   { className, ...rest },
@@ -52,7 +52,7 @@ export function Field({
       {children}
       {error ? (
         <p id={`${htmlFor}-error`} role="alert" className="text-sm font-medium text-ink">
-          <span className="mr-1.5 inline-block size-2 rounded-full bg-marker align-middle" aria-hidden />
+          <span className="mr-1.5 inline-block size-2 rounded-full bg-brass align-middle" aria-hidden />
           {error}
         </p>
       ) : hint ? (
@@ -67,7 +67,7 @@ export function Field({
 export function FormError({ message }: { message?: string | null }) {
   if (!message) return null;
   return (
-    <div role="alert" className="rounded-[var(--radius-control)] border border-line-strong bg-marker-wash px-3 py-2 text-sm text-ink">
+    <div role="alert" className="rounded-[var(--radius-control)] border border-line-strong bg-brass-wash px-3 py-2 text-sm text-ink">
       {message}
     </div>
   );

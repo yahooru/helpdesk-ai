@@ -21,7 +21,7 @@ export function SlaChip({ since, compact }: { since: string; compact?: boolean }
     <span
       className={cn(
         "type-figures inline-flex h-5 items-center rounded-full px-1.5 text-xs font-semibold",
-        level === "breach" ? "bg-marker text-ink" : level === "warn" ? "bg-marker-wash text-ink" : "bg-wash text-muted",
+        level === "breach" ? "bg-brass text-ink" : level === "warn" ? "bg-brass-wash text-ink" : "bg-wash text-muted",
       )}
       title="Time waiting for a first reply from the team"
       aria-label={`Waiting ${formatClock(wait)}`}
@@ -39,7 +39,7 @@ function StatusBadge({ item, meId }: { item: ListItem; meId: string }) {
         <Bot className="size-3" aria-hidden /> AI
       </Badge>
     );
-  if (item.status === "resolved") return <Badge tone="ledger">Resolved</Badge>;
+  if (item.status === "resolved") return <Badge tone="fern">Resolved</Badge>;
   if (item.assigneeId) return <Badge tone="neutral">{item.assigneeId === meId ? "You" : (item.assigneeName ?? "Assigned")}</Badge>;
   return null;
 }
@@ -91,7 +91,7 @@ export function ConversationList({
                 <span
                   className={cn(
                     "type-figures rounded-full px-1.5 text-xs",
-                    q.id === "unassigned" && counts.unassigned > 0 ? "bg-marker text-ink" : "bg-wash text-muted",
+                    q.id === "unassigned" && counts.unassigned > 0 ? "bg-brass text-ink" : "bg-wash text-muted",
                   )}
                 >
                   {counts[q.id]}
@@ -102,7 +102,7 @@ export function ConversationList({
         </div>
       </div>
       <div className="border-b border-line px-3 py-2">
-        <label className="flex items-center gap-2 rounded-[var(--radius-control)] border border-line bg-surface px-2.5 focus-within:border-ledger">
+        <label className="flex items-center gap-2 rounded-[var(--radius-control)] border border-line bg-surface px-2.5 focus-within:border-enamel">
           <Search className="size-4 text-faint" aria-hidden />
           <span className="sr-only">Search conversations</span>
           <input
@@ -139,7 +139,7 @@ export function ConversationList({
                 <span className="flex items-center gap-2">
                   <span className={cn("min-w-0 flex-1 truncate text-sm", unreadCount ? "font-bold" : "font-semibold")}>{item.visitorName}</span>
                   {unreadCount > 0 ? (
-                    <span className="type-figures min-w-5 rounded-full bg-ledger px-1.5 text-center text-xs font-semibold text-white" aria-label={`${unreadCount} unread`}>
+                    <span className="type-figures min-w-5 rounded-full bg-enamel px-1.5 text-center text-xs font-semibold text-white" aria-label={`${unreadCount} unread`}>
                       {unreadCount}
                     </span>
                   ) : null}

@@ -83,7 +83,7 @@ export function WidgetApp({
           >
             <MessageCircle className="size-6" aria-hidden />
             {chat.unseenCount > 0 ? (
-              <span className="type-figures absolute -top-1 -right-1 flex min-w-5 items-center justify-center rounded-full border-2 border-white bg-marker px-1 text-xs font-bold text-ink">
+              <span className="type-figures absolute -top-1 -right-1 flex min-w-5 items-center justify-center rounded-full border-2 border-white bg-brass px-1 text-xs font-bold text-ink">
                 {chat.unseenCount}
               </span>
             ) : null}

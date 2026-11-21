@@ -320,11 +320,11 @@ export function ConversationView({
                   <Bot className="size-3" aria-hidden /> AI is handling this
                 </Badge>
               ) : c.status === "queued" ? (
-                <Badge tone="marker">Waiting for the team</Badge>
+                <Badge tone="brass">Waiting for the team</Badge>
               ) : c.status === "assigned" ? (
                 <Badge>{assignee ? (assignee.userId === me.userId ? "Assigned to you" : `Assigned to ${assignee.name}`) : "Assigned"}</Badge>
               ) : (
-                <Badge tone="ledger">Resolved</Badge>
+                <Badge tone="fern">Resolved</Badge>
               )}
               {waiting ? <SlaChip since={c.handoffRequestedAt!} /> : null}
             </p>

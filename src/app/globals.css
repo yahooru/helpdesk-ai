@@ -1,40 +1,60 @@
 @import "tailwindcss";
 
 /*
- * HelpDesk AI design tokens. Four colors only:
- *   porcelain (canvas), ink (text), ledger (accent / actions), marker (attention: someone is waiting).
- * Everything else is a tint or shade of those four via color-mix. No gradients.
+ * HelpDesk AI design tokens: "front desk" palette.
+ *   porcelain  canvas (cool enamel white)
+ *   ink        text and dark surfaces (navy ink)
+ *   enamel     actions, links, the product's own voice (enamel-sign blue)
+ *   brass      attention: someone is waiting, highlights on dark (the desk bell)
+ *   fern       state only: online, resolved, success
+ * Everything else is a tint or shade of those five via color-mix. No decorative gradients.
  */
 :root {
-  --porcelain: #f3f4f1;
-  --ink: #1d2622;
-  --ledger: #146c54;
-  --marker: #f2b531;
+  --porcelain: #f4f6f9;
+  --ink: #0f1b2d;
+  --enamel: #2747c8;
+  --brass: #e9a62b;
+  --fern: #0f7a4d;
 
-  --surface: color-mix(in oklab, var(--porcelain) 30%, white);
+  --surface: #ffffff;
   --canvas: var(--porcelain);
-  --line: color-mix(in oklab, var(--ink) 13%, transparent);
-  --line-strong: color-mix(in oklab, var(--ink) 24%, transparent);
-  --muted: color-mix(in oklab, var(--ink) 64%, var(--porcelain));
-  --faint: color-mix(in oklab, var(--ink) 46%, var(--porcelain));
-  --wash: color-mix(in oklab, var(--ink) 5%, var(--porcelain));
-  --ledger-wash: color-mix(in oklab, var(--ledger) 10%, white);
-  --ledger-strong: color-mix(in oklab, var(--ledger) 82%, var(--ink));
-  --marker-wash: color-mix(in oklab, var(--marker) 26%, white);
+  --line: color-mix(in oklab, var(--ink) 10%, transparent);
+  --line-strong: color-mix(in oklab, var(--ink) 19%, transparent);
+  --muted: color-mix(in oklab, var(--ink) 68%, var(--porcelain));
+  --faint: color-mix(in oklab, var(--ink) 47%, var(--porcelain));
+  --wash: color-mix(in oklab, var(--ink) 4.5%, var(--porcelain));
+  --enamel-wash: color-mix(in oklab, var(--enamel) 9%, white);
+  --enamel-strong: color-mix(in oklab, var(--enamel) 80%, var(--ink));
+  --enamel-soft: color-mix(in oklab, var(--enamel) 55%, white);
+  --brass-wash: color-mix(in oklab, var(--brass) 22%, white);
+  --brass-strong: color-mix(in oklab, var(--brass) 55%, var(--ink));
+  --fern-wash: color-mix(in oklab, var(--fern) 11%, white);
+  --ink-raised: color-mix(in oklab, var(--ink) 88%, white);
+  --ink-line: color-mix(in oklab, white 13%, transparent);
+
+  --shadow-sm: 0 1px 2px rgb(15 27 45 / 0.06), 0 0 0 1px rgb(15 27 45 / 0.02);
+  --shadow-md: 0 1px 2px rgb(15 27 45 / 0.05), 0 8px 24px -10px rgb(15 27 45 / 0.16);
+  --shadow-lg: 0 2px 4px rgb(15 27 45 / 0.04), 0 24px 56px -18px rgb(15 27 45 / 0.32);
 
   /* Brand accent for customer-facing surfaces (overridden per workspace). */
-  --brand: var(--ledger);
+  --brand: var(--enamel);
   --brand-ink: white;
 }
 
 @theme inline {
   --color-porcelain: var(--porcelain);
   --color-ink: var(--ink);
-  --color-ledger: var(--ledger);
-  --color-ledger-strong: var(--ledger-strong);
-  --color-ledger-wash: var(--ledger-wash);
-  --color-marker: var(--marker);
-  --color-marker-wash: var(--marker-wash);
+  --color-ink-raised: var(--ink-raised);
+  --color-ink-line: var(--ink-line);
+  --color-enamel: var(--enamel);
+  --color-enamel-strong: var(--enamel-strong);
+  --color-enamel-wash: var(--enamel-wash);
+  --color-enamel-soft: var(--enamel-soft);
+  --color-brass: var(--brass);
+  --color-brass-wash: var(--brass-wash);
+  --color-brass-strong: var(--brass-strong);
+  --color-fern: var(--fern);
+  --color-fern-wash: var(--fern-wash);
   --color-surface: var(--surface);
   --color-canvas: var(--canvas);
   --color-line: var(--line);
@@ -60,12 +80,17 @@
   --text-4xl: 2.333rem;
   --text-5xl: 3.2rem;
 
-  --radius-control: 6px;
-  --radius-panel: 10px;
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --radius-control: 8px;
+  --radius-panel: 14px;
 }
 
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -81,13 +106,13 @@ body {
 
 /* Expanded width for display type: the signage voice of the product. */
 .type-display {
-  font-variation-settings: "wdth" 118;
-  letter-spacing: -0.015em;
-  line-height: 1.08;
+  font-variation-settings: "wdth" 120;
+  letter-spacing: -0.022em;
+  line-height: 1.04;
 }
 .type-heading {
-  font-variation-settings: "wdth" 108;
-  letter-spacing: -0.01em;
+  font-variation-settings: "wdth" 110;
+  letter-spacing: -0.012em;
   line-height: 1.2;
 }
 /* Condensed tabular figures for timers and counts. */
@@ -99,17 +124,24 @@ body {
 /* In the base layer so utilities (focus-visible:outline-none on inner textareas) can override it. */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--ledger);
+    outline: 2px solid var(--enamel);
     outline-offset: 2px;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
 }
 
 ::selection {
-  background: var(--marker-wash);
+  background: var(--brass-wash);
   color: var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
@@ -138,7 +170,86 @@ body {
   animation: hd-rise 0.22s ease-out both;
 }
 
+@keyframes hd-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.pop-in {
+  animation: hd-pop 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+
+/* The widget panel grows out of the launcher corner. */
+@keyframes hd-panel {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.panel-in {
+  transform-origin: bottom right;
+  animation: hd-panel 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+/* Someone is waiting: a slow brass pulse on the dot, never on text. */
+@keyframes hd-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--brass) 70%, transparent); }
+  70% { box-shadow: 0 0 0 7px color-mix(in oklab, var(--brass) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--brass) 0%, transparent); }
+}
+.waiting-pulse {
+  animation: hd-ring 1.8s ease-out infinite;
+}
+
+@keyframes hd-shimmer {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--wash) 30%, color-mix(in oklab, var(--wash) 40%, white) 50%, var(--wash) 70%) 0 0 / 200% 100%;
+  animation: hd-shimmer 1.4s linear infinite;
+  border-radius: 6px;
+}
+
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
+}
+
+/* A quiet dot grid, the "desk blotter" texture behind product shots. */
+.dot-grid {
+  background-image: radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--ink) 14%, transparent) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+.dot-grid-dark {
+  background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / 0.09) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+/* Scroll reveal (see components/marketing/reveal.tsx). Content stays visible without JS. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal][data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* FAQ disclosure: animate the marker, keep the native element. */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] .faq-plus {
+  transform: rotate(45deg);
 }

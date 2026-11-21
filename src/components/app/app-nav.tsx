@@ -118,7 +118,7 @@ export function AppNav({
               className="flex w-full items-center justify-between rounded-[var(--radius-control)] px-2 py-2 text-sm hover:bg-wash"
             >
               <span className="flex items-center gap-2">
-                <span className={cn("size-2.5 rounded-full", availability === "available" ? "bg-ledger" : "bg-[color:var(--faint)]")} />
+                <span className={cn("size-2.5 rounded-full", availability === "available" ? "bg-enamel" : "bg-[color:var(--faint)]")} />
                 {availability === "available" ? "Available for new chats" : "Away"}
               </span>
               <span className="text-xs text-muted">Change</span>

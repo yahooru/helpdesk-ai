@@ -33,7 +33,7 @@ export function Switch({
         onClick={() => onChange(!checked)}
         className={cn(
           "relative mt-0.5 inline-flex h-6 w-10 shrink-0 items-center rounded-full border transition-colors disabled:opacity-50",
-          checked ? "border-ledger bg-ledger" : "border-line-strong bg-wash",
+          checked ? "border-enamel bg-enamel" : "border-line-strong bg-wash",
         )}
       >
         <span

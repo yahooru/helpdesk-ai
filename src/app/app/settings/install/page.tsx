@@ -33,7 +33,7 @@ export default async function InstallPage() {
         <h2 className="type-heading text-lg font-semibold">Hosted support page</h2>
         <p className="mt-1 mb-3 text-sm text-muted">No website? Link customers here. It has the chat and your public articles.</p>
         <div className="flex flex-wrap items-center gap-3">
-          <a href={hosted} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-medium text-ledger hover:underline">
+          <a href={hosted} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-medium text-enamel hover:underline">
             {hosted} <ExternalLink className="size-4" aria-hidden />
           </a>
           <CopyButton value={hosted} label="Copy link" />

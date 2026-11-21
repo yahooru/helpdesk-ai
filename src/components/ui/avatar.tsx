@@ -19,13 +19,13 @@ export function Avatar({
   name: string;
   src?: string | null;
   size?: number;
-  tone?: "ink" | "ledger" | "brand" | "wash";
+  tone?: "ink" | "enamel" | "brand" | "wash";
   online?: boolean | null;
   className?: string;
 }) {
   const tones = {
     ink: "bg-ink text-white",
-    ledger: "bg-ledger text-white",
+    enamel: "bg-enamel text-white",
     brand: "bg-brand text-brand-ink",
     wash: "bg-wash text-ink border border-line",
   } as const;
@@ -47,7 +47,7 @@ export function Avatar({
         <span
           className={cn(
             "absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-surface",
-            online ? "bg-ledger" : "bg-[color:var(--faint)]",
+            online ? "bg-enamel" : "bg-[color:var(--faint)]",
           )}
           style={{ width: Math.max(9, size * 0.3), height: Math.max(9, size * 0.3) }}
           aria-label={online ? "Online" : "Offline"}

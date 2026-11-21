@@ -33,7 +33,7 @@ function Choice({ selected, onSelect, label, body, disabled }: { selected: boole
       onClick={onSelect}
       className={cn(
         "flex flex-1 flex-col items-start rounded-[var(--radius-panel)] border px-3 py-2.5 text-left transition-colors disabled:opacity-60",
-        selected ? "border-ledger bg-ledger-wash" : "border-line-strong bg-surface hover:bg-wash",
+        selected ? "border-enamel bg-enamel-wash" : "border-line-strong bg-surface hover:bg-wash",
       )}
     >
       <span className="text-sm font-semibold">{label}</span>
@@ -69,7 +69,7 @@ export function AiForm({ initial, canEdit, aiConfigured }: { initial: Settings; 
     <form onSubmit={save} className="flex max-w-2xl flex-col gap-7" noValidate>
       <FormError message={error} />
       {!aiConfigured ? (
-        <p className="rounded-[var(--radius-control)] border border-line bg-marker-wash px-3 py-2 text-sm">
+        <p className="rounded-[var(--radius-control)] border border-line bg-brass-wash px-3 py-2 text-sm">
           AI isn&apos;t configured on this server, so every conversation goes to your team.
         </p>
       ) : null}

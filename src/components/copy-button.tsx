@@ -21,7 +21,7 @@ export function CopyButton({ value, label = "Copy", className }: { value: string
   }
   return (
     <Button variant="secondary" size="sm" onClick={copy} className={className} aria-live="polite">
-      {copied ? <Check className="size-4 text-ledger" aria-hidden /> : <Copy className="size-4" aria-hidden />}
+      {copied ? <Check className="size-4 text-enamel" aria-hidden /> : <Copy className="size-4" aria-hidden />}
       {copied ? "Copied" : label}
     </Button>
   );

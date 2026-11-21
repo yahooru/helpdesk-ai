@@ -78,7 +78,7 @@ export function ArticleEditor({ article, slug, canEdit }: { article: Article; sl
         <Textarea id="article-body" value={body} onChange={(e) => setBody(e.target.value)} rows={16} disabled={!canEdit} />
       </Field>
       <label className="flex items-start gap-2 text-sm">
-        <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} disabled={!canEdit} className="mt-0.5 size-4 accent-[var(--ledger)]" />
+        <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} disabled={!canEdit} className="mt-0.5 size-4 accent-[var(--enamel)]" />
         <span>
           Show in the public help center
           <span className="block text-muted">Internal articles are still used by the assistant, but customers can&apos;t open them.</span>
@@ -92,7 +92,7 @@ export function ArticleEditor({ article, slug, canEdit }: { article: Article; sl
             </Button>
           ) : null}
           {article.isPublic ? (
-            <a href={`/s/${slug}/articles/${article.id}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-ledger hover:underline">
+            <a href={`/s/${slug}/articles/${article.id}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-enamel hover:underline">
               View on support page <ExternalLink className="size-3.5" aria-hidden />
             </a>
           ) : null}

@@ -6,8 +6,8 @@ type Tone = "neutral" | "ledger" | "marker" | "ink" | "outline";
 
 const tones: Record<Tone, string> = {
   neutral: "bg-wash text-ink",
-  ledger: "bg-ledger-wash text-ledger-strong",
-  marker: "bg-marker text-ink",
+  ledger: "bg-enamel-wash text-enamel-strong",
+  marker: "bg-brass text-ink",
   ink: "bg-ink text-white",
   outline: "border border-line-strong text-muted",
 };

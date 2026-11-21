@@ -140,7 +140,7 @@ export function Inbox({
        
       >
         {!hasKnowledge ? (
-          <Link href="/app/knowledge" className="block border-b border-line bg-marker-wash px-3 py-2 text-sm">
+          <Link href="/app/knowledge" className="block border-b border-line bg-brass-wash px-3 py-2 text-sm">
             <span className="font-medium">Add knowledge</span> so the assistant can answer. Until then, every question comes to your team.
           </Link>
         ) : null}

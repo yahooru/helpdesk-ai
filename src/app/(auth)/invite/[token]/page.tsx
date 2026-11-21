@@ -14,7 +14,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
     return (
       <AuthShell title="This invite can't be used" subtitle="It may have expired, been revoked, or already been accepted.">
         <p className="text-sm text-muted">Ask a workspace admin to send you a new invite link.</p>
-        <Link href="/login" className="mt-6 inline-block font-medium text-ledger hover:underline">
+        <Link href="/login" className="mt-6 inline-block font-medium text-enamel hover:underline">
           Go to sign in
         </Link>
       </AuthShell>
@@ -30,7 +30,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
         <div className="flex flex-col gap-3">
           <Link
             href={`/signup?next=${encodeURIComponent(next)}&email=${encodeURIComponent(found.invite.email)}`}
-            className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-ledger px-5 font-medium text-white hover:bg-ledger-strong"
+            className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-enamel px-5 font-medium text-white hover:bg-enamel-strong"
           >
             Create an account to join
           </Link>

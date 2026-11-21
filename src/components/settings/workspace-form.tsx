@@ -75,7 +75,7 @@ export function WorkspaceForm({ workspace, canEdit }: { workspace: W; canEdit: b
           <Input id="set-name" value={name} onChange={(e) => setName(e.target.value)} disabled={!canEdit} maxLength={60} />
         </Field>
         <Field label="Support page address" htmlFor="set-slug" hint="Changing it breaks old links and requires updating the widget snippet.">
-          <div className="flex items-stretch overflow-hidden rounded-[var(--radius-control)] border border-line-strong bg-surface focus-within:border-ledger">
+          <div className="flex items-stretch overflow-hidden rounded-[var(--radius-control)] border border-line-strong bg-surface focus-within:border-enamel">
             <span className="flex items-center border-r border-line bg-wash px-3 text-sm text-muted">/s/</span>
             <input
               id="set-slug"

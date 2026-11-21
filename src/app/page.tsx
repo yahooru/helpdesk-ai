@@ -60,7 +60,7 @@ export default async function Home() {
               <Link href="/login" className="inline-flex h-9 items-center rounded-[var(--radius-control)] px-3 text-sm font-medium hover:bg-wash">
                 Sign in
               </Link>
-              <Link href="/signup" className="inline-flex h-9 items-center rounded-[var(--radius-control)] bg-ledger px-3.5 text-sm font-medium text-white hover:bg-ledger-strong">
+              <Link href="/signup" className="inline-flex h-9 items-center rounded-[var(--radius-control)] bg-enamel px-3.5 text-sm font-medium text-white hover:bg-enamel-strong">
                 Create your help desk
               </Link>
             </>
@@ -78,7 +78,7 @@ export default async function Home() {
             when someone asks for a person. Set it up in about five minutes.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href={user ? "/app" : "/signup"} className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-ledger px-5 font-medium text-white hover:bg-ledger-strong">
+            <Link href={user ? "/app" : "/signup"} className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-enamel px-5 font-medium text-white hover:bg-enamel-strong">
               {user ? "Open console" : "Create your help desk"}
             </Link>
             <span className="text-sm text-muted">Free to start. No credit card.</span>
@@ -89,9 +89,9 @@ export default async function Home() {
               <code className="font-mono text-[13px] whitespace-nowrap sm:text-[15px]">
                 <span className="text-white/60">&lt;script </span>
                 <span>src=</span>
-                <span className="text-marker">&quot;{origin}/widget.js&quot;</span>
+                <span className="text-brass">&quot;{origin}/widget.js&quot;</span>
                 <span> data-workspace=</span>
-                <span className="text-marker">&quot;your-business&quot;</span>
+                <span className="text-brass">&quot;your-business&quot;</span>
                 <span className="text-white/60"> async&gt;&lt;/script&gt;</span>
               </code>
             </div>
@@ -129,7 +129,7 @@ export default async function Home() {
               <ul className="mt-4 flex flex-col gap-3">
                 {a.items.map((item) => (
                   <li key={item.text} className="flex gap-3 text-[15px]">
-                    <item.icon className="mt-0.5 size-4 shrink-0 text-ledger" aria-hidden />
+                    <item.icon className="mt-0.5 size-4 shrink-0 text-enamel" aria-hidden />
                     <span>{item.text}</span>
                   </li>
                 ))}
@@ -144,7 +144,7 @@ export default async function Home() {
               <h2 className="type-heading text-xl font-semibold">Open your help desk today</h2>
               <p className="mt-1 text-muted">Name it, add your top questions, paste one line. Your team handles the rest.</p>
             </div>
-            <Link href={user ? "/app" : "/signup"} className="inline-flex h-11 shrink-0 items-center rounded-[var(--radius-control)] bg-ledger px-5 font-medium text-white hover:bg-ledger-strong">
+            <Link href={user ? "/app" : "/signup"} className="inline-flex h-11 shrink-0 items-center rounded-[var(--radius-control)] bg-enamel px-5 font-medium text-white hover:bg-enamel-strong">
               {user ? "Open console" : "Create your help desk"}
             </Link>
           </div>

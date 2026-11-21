@@ -194,7 +194,7 @@ export function Composer({
       {!canReply && mode === "reply" ? <div className="mb-2 text-sm text-muted">{disabledReason}</div> : null}
       {error ? (
         <p role="alert" className="mb-2 text-sm font-medium text-ink">
-          <span className="mr-1.5 inline-block size-2 rounded-full bg-marker align-middle" aria-hidden />
+          <span className="mr-1.5 inline-block size-2 rounded-full bg-brass align-middle" aria-hidden />
           {error}
         </p>
       ) : null}
@@ -204,7 +204,7 @@ export function Composer({
       <div
         className={cn(
           "flex items-end gap-2 rounded-[var(--radius-panel)] border px-2 py-1.5",
-          mode === "note" ? "border-dashed border-line-strong bg-wash" : "border-line-strong bg-surface focus-within:border-ledger",
+          mode === "note" ? "border-dashed border-line-strong bg-wash" : "border-line-strong bg-surface focus-within:border-enamel",
         )}
       >
         {mode === "reply" ? (

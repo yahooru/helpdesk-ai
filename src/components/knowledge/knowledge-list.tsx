@@ -60,7 +60,7 @@ export function KnowledgeList({ initial, canEdit }: { initial: ArticleRow[]; can
           onChange={(e) => setFilter(e.target.value)}
           placeholder="Filter by title"
           aria-label="Filter knowledge by title"
-          className="h-9 w-full max-w-xs rounded-[var(--radius-control)] border border-line-strong bg-surface px-3 text-sm focus:border-ledger focus:outline-none"
+          className="h-9 w-full max-w-xs rounded-[var(--radius-control)] border border-line-strong bg-surface px-3 text-sm focus:border-enamel focus:outline-none"
         />
         <div className="flex items-center gap-3">
           <span className="type-figures text-sm text-muted">
@@ -106,7 +106,7 @@ export function KnowledgeList({ initial, canEdit }: { initial: ArticleRow[]; can
                 </Badge>
               ) : null}
               {r.indexStatus === "ready" ? (
-                <span className="flex items-center gap-1 text-xs text-ledger-strong">
+                <span className="flex items-center gap-1 text-xs text-enamel-strong">
                   <CircleCheck className="size-4" aria-hidden /> Ready
                 </span>
               ) : r.indexStatus === "failed" ? (

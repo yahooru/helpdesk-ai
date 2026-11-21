@@ -153,8 +153,8 @@ export function TeamManager({ meId, canEdit }: { meId: string; canEdit: boolean 
             <FormError message={error} />
           </div>
           {inviteUrl ? (
-            <div className="mt-3 flex flex-wrap items-center gap-2 rounded-[var(--radius-panel)] border border-line bg-ledger-wash px-3 py-2.5">
-              <Link2 className="size-4 text-ledger" aria-hidden />
+            <div className="mt-3 flex flex-wrap items-center gap-2 rounded-[var(--radius-panel)] border border-line bg-enamel-wash px-3 py-2.5">
+              <Link2 className="size-4 text-enamel" aria-hidden />
               <code className="min-w-0 flex-1 truncate text-sm" data-testid="invite-url">
                 {inviteUrl}
               </code>
@@ -180,7 +180,7 @@ export function TeamManager({ meId, canEdit }: { meId: string; canEdit: boolean 
                 </p>
                 <p className="truncate text-sm text-muted">{m.email}</p>
               </div>
-              <Badge tone={m.availability === "available" ? "ledger" : "outline"}>{m.availability === "available" ? "Available" : "Away"}</Badge>
+              <Badge tone={m.availability === "available" ? "fern" : "outline"}>{m.availability === "available" ? "Available" : "Away"}</Badge>
               {canEdit ? (
                 <Select
                   value={m.role}

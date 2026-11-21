@@ -137,7 +137,7 @@ export function AddKnowledge({
         </>
       )}
       <label className="flex items-start gap-2 text-sm">
-        <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} className="mt-0.5 size-4 accent-[var(--ledger)]" />
+        <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} className="mt-0.5 size-4 accent-[var(--enamel)]" />
         <span>
           Show in the public help center
           <span className="block text-muted">Turn off for internal notes the assistant may use but customers shouldn&apos;t browse.</span>

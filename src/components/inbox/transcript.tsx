@@ -91,7 +91,7 @@ export function Transcript({
             <div
               className={cn(
                 "max-w-[min(560px,85%)] rounded-[14px] px-3.5 py-2.5 text-[15px] leading-relaxed",
-                mine ? "rounded-tr-[4px] bg-ledger text-white" : ai ? "rounded-tl-[4px] border border-line bg-surface" : "rounded-tl-[4px] bg-wash",
+                mine ? "rounded-tr-[4px] bg-enamel text-white" : ai ? "rounded-tl-[4px] border border-line bg-surface" : "rounded-tl-[4px] bg-wash",
                 it.status === "failed" && "opacity-70",
               )}
             >

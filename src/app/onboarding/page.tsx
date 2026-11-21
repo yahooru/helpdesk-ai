@@ -63,11 +63,11 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
       <main className="mx-auto max-w-5xl px-4 py-10 sm:px-8">
         <ol className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm" aria-label="Setup progress">
           {STEPS.map((s, i) => (
-            <li key={s.id} className={cn("flex items-center gap-2", i === index ? "text-ink" : i < index ? "text-ledger" : "text-faint")}>
+            <li key={s.id} className={cn("flex items-center gap-2", i === index ? "text-ink" : i < index ? "text-enamel" : "text-faint")}>
               <span
                 className={cn(
                   "type-figures flex size-6 items-center justify-center rounded-full border text-xs font-semibold",
-                  i === index ? "border-ink bg-ink text-white" : i < index ? "border-ledger bg-ledger text-white" : "border-line-strong",
+                  i === index ? "border-ink bg-ink text-white" : i < index ? "border-enamel bg-enamel text-white" : "border-line-strong",
                 )}
               >
                 {i + 1}
@@ -97,7 +97,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
                   href={`/s/${ctx.workspace.slug}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 font-medium text-ledger hover:underline"
+                  className="inline-flex items-center gap-2 font-medium text-enamel hover:underline"
                 >
                   {origin}/s/{ctx.workspace.slug}
                   <ExternalLink className="size-4" aria-hidden />
@@ -106,7 +106,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
               <div className="border-t border-line pt-6">
                 <Link
                   href="/app/inbox"
-                  className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-ledger px-5 font-medium text-white hover:bg-ledger-strong"
+                  className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-enamel px-5 font-medium text-white hover:bg-enamel-strong"
                 >
                   Open my inbox
                 </Link>

@@ -85,7 +85,7 @@ export function AuthForm({ mode, next, defaultEmail }: { mode: Mode; next?: stri
       </Button>
       <p className="text-sm text-muted">
         {mode === "signup" ? "Already have an account? " : "New to HelpDesk AI? "}
-        <Link href={otherHref} className="font-medium text-ledger underline-offset-4 hover:underline">
+        <Link href={otherHref} className="font-medium text-enamel underline-offset-4 hover:underline">
           {mode === "signup" ? "Sign in" : "Create an account"}
         </Link>
       </p>

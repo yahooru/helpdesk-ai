@@ -54,7 +54,7 @@ function ConnectionBanner({ state }: { state: ConnectionState }) {
         ? "Live chat couldn't connect. Messages may be delayed."
         : "Reconnecting to live chat…";
   return (
-    <div role="status" className="fixed inset-x-0 top-0 z-40 flex items-center justify-center gap-2 bg-marker px-4 py-1.5 text-sm font-medium text-ink">
+    <div role="status" className="fixed inset-x-0 top-0 z-40 flex items-center justify-center gap-2 bg-brass px-4 py-1.5 text-sm font-medium text-ink">
       <WifiOff className="size-4" aria-hidden />
       {text}
       {state === "kicked" || state === "error" ? (

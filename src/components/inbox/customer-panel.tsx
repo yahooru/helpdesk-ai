@@ -26,7 +26,7 @@ export function CustomerPanel({ detail, onOpen }: { detail: Detail; onOpen: (id:
         <div className="min-w-0">
           <p className="truncate font-semibold">{visitor.name}</p>
           {visitor.email ? (
-            <a href={`mailto:${visitor.email}`} className="flex items-center gap-1 truncate text-sm text-ledger hover:underline">
+            <a href={`mailto:${visitor.email}`} className="flex items-center gap-1 truncate text-sm text-enamel hover:underline">
               <Mail className="size-3.5 shrink-0" aria-hidden />
               {visitor.email}
             </a>
@@ -98,7 +98,7 @@ export function CustomerPanel({ detail, onOpen }: { detail: Detail; onOpen: (id:
                   <span className="block truncate text-sm">{p.subject ?? "No messages"}</span>
                   <span className="flex items-center gap-1.5 text-xs text-muted">
                     {formatDateTime(p.createdAt)}
-                    {p.status === "resolved" ? <Badge tone="ledger">Resolved</Badge> : <Badge>Open</Badge>}
+                    {p.status === "resolved" ? <Badge tone="fern">Resolved</Badge> : <Badge>Open</Badge>}
                     {p.csatRating ? <span className="type-figures">{p.csatRating}/5</span> : null}
                   </span>
                 </button>

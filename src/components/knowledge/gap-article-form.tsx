@@ -29,7 +29,7 @@ export function GapArticleForm({ gapId }: { gapId: string }) {
   return (
     <>
       {!draft.body ? (
-        <p className="mb-4 rounded-[var(--radius-control)] border border-line bg-marker-wash px-3 py-2 text-sm">
+        <p className="mb-4 rounded-[var(--radius-control)] border border-line bg-brass-wash px-3 py-2 text-sm">
           Nobody on the team answered this question yet, so there is no draft. Write the answer below.
         </p>
       ) : null}

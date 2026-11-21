@@ -32,7 +32,7 @@ export function KnowledgeGaps({ initial }: { initial: Gap[] }) {
     <ol className="divide-y divide-line">
       {gaps.map((g) => (
         <li key={g.id} className="flex flex-wrap items-center gap-3 py-3">
-          <span className="type-figures flex h-7 min-w-7 items-center justify-center rounded-full bg-marker-wash px-2 text-sm font-semibold" title="Times asked">
+          <span className="type-figures flex h-7 min-w-7 items-center justify-center rounded-full bg-brass-wash px-2 text-sm font-semibold" title="Times asked">
             {g.occurrences}
           </span>
           <div className="min-w-0 flex-1">
@@ -42,7 +42,7 @@ export function KnowledgeGaps({ initial }: { initial: Gap[] }) {
           <div className="flex items-center gap-1">
             <Link
               href={`/app/knowledge/new?gap=${g.id}`}
-              className="inline-flex h-8 items-center gap-1.5 rounded-[var(--radius-control)] bg-ledger px-2.5 text-sm font-medium text-white hover:bg-ledger-strong"
+              className="inline-flex h-8 items-center gap-1.5 rounded-[var(--radius-control)] bg-enamel px-2.5 text-sm font-medium text-white hover:bg-enamel-strong"
             >
               <FilePlus2 className="size-4" aria-hidden /> Write article
             </Link>
