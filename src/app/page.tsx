@@ -225,9 +225,11 @@ export default async function Home() {
                   Paste it before the closing body tag of any website or site builder. It adds a chat launcher in the corner; the chat runs
                   on its own, so it never slows your page or clashes with your styles.
                 </p>
-                <p className="mt-6 flex items-center gap-2 text-sm text-white/70">
-                  <Globe className="size-4 text-brass" aria-hidden />
-                  No website? You also get a hosted support page at <span className="font-mono text-white">/s/your-business</span>
+                <p className="mt-6 flex items-start gap-2 text-sm text-white/70">
+                  <Globe className="mt-0.5 size-4 shrink-0 text-brass" aria-hidden />
+                  <span>
+                    No website? You also get a hosted support page at <span className="font-mono whitespace-nowrap text-white">/s/your-business</span>
+                  </span>
                 </p>
               </div>
               <div className="overflow-hidden rounded-[14px] border border-ink-line bg-ink-raised">
@@ -323,7 +325,7 @@ export default async function Home() {
           <div className="relative mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-28">
             <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
               <div data-reveal>
-                <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">Realtime by Nexconn. Grounded answers by Gemini.</h2>
+                <h2 className="type-display text-3xl font-semibold sm:text-4xl">Realtime by Nexconn. Grounded answers by Gemini.</h2>
                 <p className="mt-5 max-w-md text-white/70">
                   Every conversation is a Nexconn group channel that the customer, the assistant and your agents share. Answers come from
                   Gemini, retrieved only from your own articles.
@@ -385,7 +387,13 @@ export default async function Home() {
         {/* Final call */}
         <section className="px-4 pb-24 sm:px-6">
           <div data-reveal className="relative mx-auto flex max-w-6xl flex-col items-start gap-8 overflow-hidden rounded-[24px] bg-enamel px-6 py-14 text-white sm:px-12 lg:flex-row lg:items-center lg:justify-between">
-            <BrandGlyph size={260} className="pointer-events-none absolute -right-10 -bottom-16 opacity-[0.12] [&_*]:fill-white" />
+            <BrandGlyph
+              size={300}
+              body="#fff"
+              bell="var(--enamel)"
+              button="var(--enamel)"
+              className="pointer-events-none absolute -right-8 -bottom-20 rotate-[-8deg] opacity-[0.13]"
+            />
             <div className="relative max-w-xl">
               <h2 className="type-display text-3xl font-semibold sm:text-[2.6rem]">Open your help desk today.</h2>
               <p className="mt-4 text-white/80">Name it, add your top questions, paste one line. The assistant handles the first answer; your team handles the rest.</p>

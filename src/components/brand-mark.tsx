@@ -6,15 +6,27 @@ import { cn } from "@/lib/cn";
  * the bubble is where the answer comes back. The brass button is the same brass that marks
  * "someone is waiting" across the product. Mirrors public/logo.svg and app/icon.svg.
  */
-export function BrandGlyph({ size = 24, className }: { size?: number; className?: string }) {
+export function BrandGlyph({
+  size = 24,
+  className,
+  body = "var(--enamel)",
+  bell = "#fff",
+  button = "var(--brass)",
+}: {
+  size?: number;
+  className?: string;
+  body?: string;
+  bell?: string;
+  button?: string;
+}) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden className={cn("shrink-0", className)}>
-      <rect x="2.5" y="3.5" width="27" height="21" rx="8" fill="var(--enamel)" />
-      <path d="M7.6 20.5v7.6c0 .9 1 1.4 1.7.8l7.4-5.9z" fill="var(--enamel)" />
-      <rect x="15.25" y="10.4" width="1.5" height="3.2" rx=".5" fill="#fff" />
-      <path d="M9.6 19a6.4 6.4 0 0 1 12.8 0z" fill="#fff" />
-      <rect x="8.2" y="19.9" width="15.6" height="2" rx="1" fill="#fff" />
-      <circle cx="16" cy="9.4" r="1.9" fill="var(--brass)" />
+      <rect x="2.5" y="3.5" width="27" height="21" rx="8" fill={body} />
+      <path d="M7.6 20.5v7.6c0 .9 1 1.4 1.7.8l7.4-5.9z" fill={body} />
+      <rect x="15.25" y="10.4" width="1.5" height="3.2" rx=".5" fill={bell} />
+      <path d="M9.6 19a6.4 6.4 0 0 1 12.8 0z" fill={bell} />
+      <rect x="8.2" y="19.9" width="15.6" height="2" rx="1" fill={bell} />
+      <circle cx="16" cy="9.4" r="1.9" fill={button} />
     </svg>
   );
 }

@@ -24,10 +24,10 @@ if (full) {
   // Trigger every scroll reveal before a full-page capture.
   await page.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 500) {
-      window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 60));
+      window.scrollTo({ top: y, behavior: "instant" });
+      await new Promise((r) => setTimeout(r, 120));
     }
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   });
 }
 if (scroll) await page.evaluate((y) => window.scrollTo(0, y), scroll);
