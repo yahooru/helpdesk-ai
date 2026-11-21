@@ -113,7 +113,9 @@ src/components/knowledge/  add knowledge (FAQ / paste / upload), list, editor, g
 src/components/analytics/  daily outcome chart, knowledge gaps
 src/components/settings/   workspace, assistant, team, saved replies
 src/lib/db/                Drizzle schema + Neon client (retrying fetch)
-src/lib/nexconn/           server.ts (Platform API), client.ts (browser SDK wrapper), types.ts
+src/lib/nexconn/           server.ts (Platform API), client.ts (browser SDK wrapper), provision.ts (self-healing
+                           groups), token-cache.ts (App Key-tagged token cache), types.ts
+src/components/marketing/  landing hero demo and scroll motion helpers
 src/lib/ai/                gemini.ts, prompts.ts, retrieval.ts, reply.ts (AI pipeline), assist.ts
 src/lib/knowledge/         chunk.ts, parse.ts (txt/md/pdf), indexer.ts
 src/lib/conversations/     service.ts (handoff, claim, transfer, resolve, CSAT), queries.ts
@@ -121,7 +123,8 @@ src/lib/auth/              password, session JWT cookie, guards, visitor credent
 drizzle/                   SQL migrations (committed)
 public/widget.js           embeddable loader (iframe + postMessage resize)
 examples/                  plain external HTML page with the one-line snippet
-scripts/                   serve-examples.mjs (other origin for tests), cleanup-test-data.mjs
+scripts/                   serve-examples.mjs (other origin for tests), cleanup-test-data.mjs,
+                           nexconn-smoke.mjs (checks every Nexconn feature), generate-icons.mjs
 tests/e2e/                 Playwright (multi-context journeys, screenshots)
 tests/unit/                Vitest
 ```
@@ -136,7 +139,10 @@ chunks (pgvector 768), knowledge_gaps (pgvector 768), saved_replies, rate_limits
 
 The README table "How this uses Nexconn" lists each feature with file paths. Summary:
 
-* Tokens / registration: `lib/nexconn/server.ts#issueToken` (bot per workspace, teammates, customers).
+* Tokens / registration: `lib/nexconn/server.ts#issueToken` (bot per workspace, teammates, customers). Cached
+  teammate tokens are stored as `nx1|<appKey>|<token>` so a new App Key never reuses an old token.
+* Self-healing groups: `lib/nexconn/provision.ts` re-creates staff and conversation groups under their existing ids
+  (create, or on 25409 join members) once per server instance and App Key. Changing the App Key needs no migration.
 * Web SDK: init with `AreaCode.SG`, custom type registration, connection/message handlers, token
   refresh (31004), kick (31010), manual reconnect (33007), resync after reconnect: `lib/nexconn/client.ts`.
 * Group channels: create (conversation + staff group), join/leave (claim, transfer, team changes),
@@ -200,4 +206,10 @@ vercel deploy --prod   # remote build; vercel.json pins framework nextjs + regio
 * TypeScript strict; zod validation on every route; authorization on every route.
 * Nexconn IDs: `${NEXCONN_ID_PREFIX}${nanoid(alnum)}` only (letters and digits).
 * App Secret and Gemini key are server-only (`server-only` import in those modules).
-* Palette: 4 colors (porcelain, slate ink, ledger green, marker amber). No gradients.
+* Palette ("front desk"): porcelain canvas, navy ink, enamel blue (actions), brass (someone is waiting), fern
+  (online/resolved only). Tokens live in `src/app/globals.css`; no decorative gradients. The brand mark (bell in a
+  speech bubble) is `components/brand-mark.tsx`; regenerate icon files with `node scripts/generate-icons.mjs`.
+* Motion: one orchestrated moment per page (landing hero demo), scroll reveals via `[data-reveal]`, and motion that
+  answers an action. Always respect `prefers-reduced-motion`.
+* Nexconn: never send into or join a group without `ensureConversationChannel` / `ensureStaffChannel` first
+  (`lib/nexconn/provision.ts`); sending to a missing group succeeds silently.
