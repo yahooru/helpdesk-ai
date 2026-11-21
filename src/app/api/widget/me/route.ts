@@ -5,12 +5,15 @@ import { visitors } from "@/lib/db/schema";
 import { requireVisitor } from "@/lib/auth/visitor";
 import { json, parseJson, route } from "@/lib/http";
 import { emailSchema, personNameSchema } from "@/lib/validation";
+import { ensureConversationChannel, tryEnsure } from "@/lib/nexconn/provision";
 import { visitorConversations } from "@/lib/widget/service";
 
-/** The returning customer's identity and conversations. */
+/** The returning customer's identity and conversations (the latest one is reopened in the chat). */
 export const GET = route(async (req: Request) => {
   const { visitor, workspace } = await requireVisitor(req);
   const conversations = await visitorConversations(visitor.id);
+  const latest = conversations[0];
+  if (latest) await tryEnsure(ensureConversationChannel(workspace, { ...latest, visitorId: visitor.id }), "conversation");
   return json({
     visitor: { id: visitor.id, name: visitor.name, email: visitor.email, nexconnUserId: visitor.nexconnUserId },
     workspaceSlug: workspace.slug,

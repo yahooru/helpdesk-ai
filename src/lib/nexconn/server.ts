@@ -6,8 +6,18 @@ import { HD_TYPES } from "./types";
 
 /**
  * Minimal Platform Chat API client (server only). Every request is signed with
- * SHA1(appSecret + nonce + timestamp). Falls back to the backup host on network errors / 5xx.
+ * SHA1(appSecret + nonce + timestamp). Falls back to the backup host on network errors / 5xx,
+ * except that a send that timed out is never repeated (it may have been delivered).
  */
+
+/** Result codes the app reacts to (https://docs.nexconn.ai/platform-chat-api/code). */
+export const NX_CODES = {
+  groupExists: 25409,
+  groupMissing: 25410,
+  alreadyMember: 25412,
+  notMember: 25418,
+  userLimit: 2007,
+} as const;
 
 export class NexconnError extends Error {
   constructor(
@@ -37,7 +47,11 @@ function signHeaders() {
   };
 }
 
-async function post<T>(path: string, body: unknown): Promise<T | undefined> {
+export function isNexconnCode(err: unknown, ...codes: number[]): boolean {
+  return err instanceof NexconnError && err.code !== undefined && codes.includes(err.code);
+}
+
+async function post<T>(path: string, body: unknown, opts: { idempotent?: boolean } = {}): Promise<T | undefined> {
   const { NEXCONN_API_BASE, NEXCONN_API_BASE_BACKUP } = env();
   const hosts = [NEXCONN_API_BASE, NEXCONN_API_BASE_BACKUP];
   let lastError: unknown;
@@ -49,10 +63,12 @@ async function post<T>(path: string, body: unknown): Promise<T | undefined> {
         headers: signHeaders(),
         body: JSON.stringify(body),
         cache: "no-store",
-        signal: AbortSignal.timeout(10_000),
+        signal: AbortSignal.timeout(8_000),
       });
     } catch (err) {
       lastError = err;
+      // A timed-out send may already have been delivered; repeating it would duplicate the message.
+      if (opts.idempotent === false && err instanceof Error && err.name === "TimeoutError") break;
       continue;
     }
     if (res.status >= 500) {
@@ -68,7 +84,7 @@ async function post<T>(path: string, body: unknown): Promise<T | undefined> {
     }
     if (json.code !== 0 && json.code !== 200) {
       throw new NexconnError(
-        `Nexconn ${path} failed with code ${json.code}${json.msg ? `: ${json.msg}` : ""}`,
+        `Nexconn ${path} failed with code ${json.code}${json.errorMessage || json.msg ? `: ${json.errorMessage || json.msg}` : ""}`,
         json.code,
         res.status,
       );
@@ -106,14 +122,37 @@ export async function createGroup(input: { channelId: string; name: string; owne
   });
 }
 
+/** Adds members. Already being a member is not an error. */
 export async function joinGroup(channelId: string, userIds: string[]) {
   if (userIds.length === 0) return;
-  await post("/v4/group-channel/join", { channelId, userIds });
+  try {
+    await post("/v4/group-channel/join", { channelId, userIds });
+  } catch (err) {
+    if (!isNexconnCode(err, NX_CODES.alreadyMember)) throw err;
+  }
 }
 
+/** Removes members. Not being a member, or the group being gone, is not an error. */
 export async function leaveGroup(channelId: string, userIds: string[]) {
   if (userIds.length === 0) return;
-  await post("/v4/group-channel/leave", { channelId, userIds });
+  try {
+    await post("/v4/group-channel/leave", { channelId, userIds });
+  } catch (err) {
+    if (!isNexconnCode(err, NX_CODES.notMember, NX_CODES.groupMissing)) throw err;
+  }
+}
+
+/**
+ * Makes sure a group exists with these members, keeping its id. Creates it, or when it already
+ * exists, adds the members (joining is idempotent). Used to heal groups after an App Key change.
+ */
+export async function ensureGroup(input: { channelId: string; name: string; owner: string; userIds: string[] }) {
+  try {
+    await createGroup(input);
+  } catch (err) {
+    if (!isNexconnCode(err, NX_CODES.groupExists)) throw err;
+    await joinGroup(input.channelId, input.userIds.slice(0, 30));
+  }
 }
 
 export async function updateGroupName(channelId: string, name: string) {
@@ -152,6 +191,7 @@ export async function sendGroupMessage(input: SendGroupInput): Promise<string | 
       ...(input.metadata ? { hasMetadata: true, metadata: input.metadata } : {}),
       ...(input.needReadReceipt ? { needReadReceipt: 1 } : {}),
     },
+    { idempotent: false },
   );
   return result?.messageIds?.[0]?.messageId;
 }
@@ -188,7 +228,7 @@ export async function sendGroupStreamChunk(input: {
     isEchoToSender: 0,
     shouldPersist: 1,
     ...(input.metadata ? { metadata: input.metadata } : {}),
-  });
+  }, { idempotent: false });
   return result?.messageId;
 }
 

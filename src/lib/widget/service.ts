@@ -31,6 +31,7 @@ export async function visitorConversations(visitorId: string) {
     .select({
       id: conversations.id,
       channelId: conversations.channelId,
+      assigneeId: conversations.assigneeId,
       status: conversations.status,
       subject: conversations.subject,
       lastMessagePreview: conversations.lastMessagePreview,

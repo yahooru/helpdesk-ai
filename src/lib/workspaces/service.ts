@@ -3,14 +3,21 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { memberships, users, workspaces, type User, type Workspace } from "@/lib/db/schema";
 import { HttpError } from "@/lib/auth/guards";
-import { createGroup, issueToken, joinGroup, leaveGroup, newNexconnId } from "@/lib/nexconn/server";
+import { ensureStaffChannel } from "@/lib/nexconn/provision";
+import { createGroup, issueToken, joinGroup, leaveGroup, newNexconnId, nexconnAppKey } from "@/lib/nexconn/server";
+import { packToken, unpackToken } from "@/lib/nexconn/token-cache";
 import { isValidSlug } from "@/lib/slug";
 
-/** Returns a Nexconn access token for a staff user, issuing (and caching) one when needed. */
-export async function staffNexconnToken(user: User): Promise<string> {
-  if (user.nexconnToken) return user.nexconnToken;
+/**
+ * Returns a Nexconn access token for a staff user, issuing (and caching) one when needed. A cached
+ * token from another Nexconn app, or `fresh`, issues a new one (issuing also registers the user).
+ */
+export async function staffNexconnToken(user: User, fresh = false): Promise<string> {
+  const appKey = nexconnAppKey();
+  const cached = fresh ? null : unpackToken(user.nexconnToken, appKey);
+  if (cached) return cached;
   const token = await issueToken(user.nexconnUserId, user.name);
-  await db().update(users).set({ nexconnToken: token }).where(eq(users.id, user.id));
+  await db().update(users).set({ nexconnToken: packToken(token, appKey) }).where(eq(users.id, user.id));
   return token;
 }
 
@@ -62,6 +69,7 @@ export async function createWorkspace(
 /** Adds a user to a workspace (invite acceptance) and to the staff channel. */
 export async function addMember(workspace: Workspace, user: User, role: "admin" | "agent") {
   await staffNexconnToken(user);
+  await ensureStaffChannel(workspace);
   await joinGroup(workspace.staffChannelId, [user.nexconnUserId]);
   await db()
     .insert(memberships)
