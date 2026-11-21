@@ -22,7 +22,7 @@ function niceMax(v: number) {
 }
 
 function shortDay(d: string) {
-  return new Date(`${d}T00:00:00Z`).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
+  return new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 }
 
 export function DailyChart({ series }: { series: DayPoint[] }) {

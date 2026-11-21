@@ -40,7 +40,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </header>
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <h1 className="type-display text-3xl font-semibold">{article.title}</h1>
-        <p className="mt-2 text-sm text-muted">Updated {new Date(article.updatedAt).toLocaleDateString(undefined, { dateStyle: "medium" })}</p>
+        <p className="mt-2 text-sm text-muted">Updated {new Date(article.updatedAt).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" })}</p>
         <article className="mt-8 max-w-[68ch] text-[16px] leading-[1.7] whitespace-pre-wrap">{article.body}</article>
         <div className="mt-12 border-t border-line pt-6">
           <p className="text-sm text-muted">Still need help?</p>

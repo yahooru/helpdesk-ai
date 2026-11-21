@@ -42,15 +42,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Marks the document as scripted before first paint so scroll reveals never hide content without JS.
-const JS_FLAG = "document.documentElement.classList.add('js')";
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${code.variable} h-full`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
-      </head>
+    <html lang="en" className={`${archivo.variable} ${code.variable} h-full`}>
       <body className="min-h-full">{children}</body>
     </html>
   );

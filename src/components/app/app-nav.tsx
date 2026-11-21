@@ -1,5 +1,5 @@
 "use client";
-import { BarChart3, BookOpen, ChevronsUpDown, Inbox, LogOut, Settings } from "lucide-react";
+import { BarChart3, BookOpen, Check, ChevronsUpDown, ExternalLink, Inbox, LogOut, Plus, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -75,75 +75,71 @@ export function AppNav({
   }
 
   const items = NAV.filter((n) => !n.admin || role === "admin");
+  const available = availability === "available";
 
   return (
     <nav
       aria-label="Main"
-      className="flex shrink-0 items-center gap-1 border-b border-line bg-surface px-2 py-1.5 md:h-dvh md:w-[208px] md:flex-col md:items-stretch md:gap-0 md:border-r md:border-b-0 md:px-3 md:py-3"
+      className="flex shrink-0 items-center gap-1 bg-ink px-2 py-1.5 text-white md:h-dvh md:w-[236px] md:flex-col md:items-stretch md:gap-0 md:px-3 md:py-3"
     >
-      <div ref={menuRef} className="relative md:mb-4">
+      <div ref={menuRef} className="relative md:mb-5">
         <button
           type="button"
           onClick={() => setMenu((m) => !m)}
           aria-expanded={menu}
           aria-haspopup="menu"
-          className="flex w-full items-center gap-2 rounded-[var(--radius-control)] px-1.5 py-1.5 text-left hover:bg-wash"
+          className="flex w-full items-center gap-2.5 rounded-[10px] p-1.5 text-left transition-colors hover:bg-white/8"
         >
           {workspace.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={workspace.logoUrl} alt="" className="size-7 rounded-md object-cover" />
+            <img src={workspace.logoUrl} alt="" className="size-8 rounded-[8px] bg-white object-cover" />
           ) : (
-            <BrandGlyph size={28} />
+            <span className="flex size-8 items-center justify-center rounded-[8px] bg-white">
+              <BrandGlyph size={24} />
+            </span>
           )}
           <span className="hidden min-w-0 flex-1 md:block">
             <span className="block truncate text-sm font-semibold">{workspace.name}</span>
-            <span className="block truncate text-xs text-muted">{user.name}</span>
+            <span className="block truncate text-xs text-white/55">{role === "admin" ? "Admin" : "Agent"}</span>
           </span>
-          <ChevronsUpDown className="hidden size-4 text-muted md:block" aria-hidden />
+          <ChevronsUpDown className="hidden size-4 text-white/45 md:block" aria-hidden />
         </button>
         {menu ? (
-          <div role="menu" className="rise-in absolute left-0 z-30 mt-1 w-64 rounded-[var(--radius-panel)] border border-line-strong bg-surface p-1.5 shadow-[0_14px_32px_-12px_rgba(15,27,45,0.3)]">
-            <div className="flex items-center gap-2 px-2 py-2">
-              <Avatar name={user.name} size={28} />
+          <div
+            role="menu"
+            className="pop-in absolute left-0 z-30 mt-1.5 w-72 rounded-[var(--radius-panel)] border border-line bg-surface p-1.5 text-ink shadow-lg"
+          >
+            <div className="flex items-center gap-2.5 px-2 py-2">
+              <Avatar name={user.name} size={32} tone="enamel" />
               <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{user.name}</p>
+                <p className="truncate text-sm font-semibold">{user.name}</p>
                 <p className="truncate text-xs text-muted">{user.email}</p>
               </div>
             </div>
-            <button
-              role="menuitemcheckbox"
-              aria-checked={availability === "available"}
-              type="button"
-              onClick={toggleAvailability}
-              className="flex w-full items-center justify-between rounded-[var(--radius-control)] px-2 py-2 text-sm hover:bg-wash"
-            >
-              <span className="flex items-center gap-2">
-                <span className={cn("size-2.5 rounded-full", availability === "available" ? "bg-enamel" : "bg-[color:var(--faint)]")} />
-                {availability === "available" ? "Available for new chats" : "Away"}
-              </span>
-              <span className="text-xs text-muted">Change</span>
-            </button>
-            {workspaces.length > 1 ? (
-              <div className="mt-1 border-t border-line pt-1">
-                <p className="px-2 py-1 text-xs text-muted">Switch workspace</p>
-                {workspaces.map((w) => (
-                  <button
-                    key={w.id}
-                    role="menuitem"
-                    type="button"
-                    disabled={w.id === workspace.id}
-                    onClick={() => switchTo(w.id)}
-                    className="flex w-full items-center rounded-[var(--radius-control)] px-2 py-1.5 text-left text-sm hover:bg-wash disabled:font-semibold disabled:hover:bg-transparent"
-                  >
-                    {w.name}
-                  </button>
-                ))}
-              </div>
-            ) : null}
             <div className="mt-1 border-t border-line pt-1">
-              <Link role="menuitem" href="/onboarding?new=1" className="block rounded-[var(--radius-control)] px-2 py-1.5 text-sm hover:bg-wash">
-                Create another workspace
+              <p className="px-2 pt-1.5 pb-1 text-xs font-medium text-muted">Workspaces</p>
+              {workspaces.map((w) => (
+                <button
+                  key={w.id}
+                  role="menuitem"
+                  type="button"
+                  disabled={w.id === workspace.id}
+                  onClick={() => switchTo(w.id)}
+                  className="flex w-full items-center justify-between rounded-[var(--radius-control)] px-2 py-1.5 text-left text-sm hover:bg-wash disabled:font-semibold disabled:hover:bg-transparent"
+                >
+                  <span className="truncate">{w.name}</span>
+                  {w.id === workspace.id ? <Check className="size-4 text-enamel" aria-hidden /> : null}
+                </button>
+              ))}
+              <Link
+                role="menuitem"
+                href="/onboarding?new=1"
+                className="flex items-center gap-2 rounded-[var(--radius-control)] px-2 py-1.5 text-sm text-muted hover:bg-wash hover:text-ink"
+              >
+                <Plus className="size-4" aria-hidden /> Create another workspace
               </Link>
+            </div>
+            <div className="mt-1 border-t border-line pt-1">
               <button
                 role="menuitem"
                 type="button"
@@ -156,7 +152,8 @@ export function AppNav({
           </div>
         ) : null}
       </div>
-      <ul className="flex flex-1 items-center gap-0.5 overflow-x-auto md:flex-none md:flex-col md:items-stretch">
+
+      <ul className="flex flex-1 items-center gap-0.5 overflow-x-auto md:flex-none md:flex-col md:items-stretch md:gap-1">
         {items.map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
@@ -165,26 +162,45 @@ export function AppNav({
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-[var(--radius-control)] px-2.5 py-2 text-sm font-medium transition-colors",
-                  active ? "bg-ink text-white" : "text-muted hover:bg-wash hover:text-ink",
+                  "relative flex items-center gap-3 rounded-[8px] px-2.5 py-2 text-sm font-medium transition-colors",
+                  active ? "bg-white/12 text-white" : "text-white/65 hover:bg-white/6 hover:text-white",
                 )}
               >
-                <item.icon className="size-4" aria-hidden />
+                {active ? <span aria-hidden className="absolute top-2 bottom-2 -left-3 hidden w-[3px] rounded-r-full bg-brass md:block" /> : null}
+                <item.icon className="size-[18px]" aria-hidden />
                 <span className="hidden sm:inline">{item.label}</span>
               </Link>
             </li>
           );
         })}
       </ul>
-      <div className="mt-auto hidden md:block">
+
+      <div className="mt-auto hidden flex-col gap-2 md:flex">
         <a
           href={`/s/${workspace.slug}`}
           target="_blank"
           rel="noreferrer"
-          className="block rounded-[var(--radius-control)] px-2.5 py-2 text-xs text-muted hover:bg-wash hover:text-ink"
+          className="flex items-center justify-between rounded-[8px] px-2.5 py-2 text-sm text-white/60 transition-colors hover:bg-white/6 hover:text-white"
         >
-          Open support page
+          Support page
+          <ExternalLink className="size-3.5" aria-hidden />
         </a>
+        <div className="flex items-center gap-2.5 rounded-[10px] border border-ink-line bg-ink-raised p-2">
+          <Avatar name={user.name} size={30} tone="enamel" online={available} className="[&>span:last-child]:border-ink-raised" />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium">{user.name}</p>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={available}
+              onClick={toggleAvailability}
+              className="text-xs text-white/55 underline-offset-2 hover:text-white hover:underline"
+              title={available ? "You receive new conversations. Click to go away." : "You don't receive new conversations. Click to become available."}
+            >
+              {available ? "Available for new chats" : "Away"}
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
   );
