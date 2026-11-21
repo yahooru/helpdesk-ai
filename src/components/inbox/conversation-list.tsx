@@ -1,5 +1,6 @@
 "use client";
 import { Bot, Inbox as InboxIcon, Search, Star } from "lucide-react";
+import { Avatar } from "@/components/ui/avatar";
 import { Badge, EmptyState } from "@/components/ui/misc";
 import { cn } from "@/lib/cn";
 import { formatClock, formatRelative, slaLevel } from "@/lib/time";
@@ -20,12 +21,17 @@ export function SlaChip({ since, compact }: { since: string; compact?: boolean }
   return (
     <span
       className={cn(
-        "type-figures inline-flex h-5 items-center rounded-full px-1.5 text-xs font-semibold",
-        level === "breach" ? "bg-brass text-ink" : level === "warn" ? "bg-brass-wash text-ink" : "bg-wash text-muted",
+        "type-figures inline-flex h-5 items-center gap-1.5 rounded-full px-2 text-xs font-semibold",
+        level === "breach"
+          ? "bg-brass text-ink"
+          : level === "warn"
+            ? "bg-brass-wash text-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--brass)_55%,transparent)]"
+            : "bg-surface text-ink shadow-[inset_0_0_0_1px_var(--line-strong)]",
       )}
       title="Time waiting for a first reply from the team"
       aria-label={`Waiting ${formatClock(wait)}`}
     >
+      <span aria-hidden className={cn("size-1.5 rounded-full", level === "ok" ? "bg-brass" : "waiting-pulse bg-ink")} />
       {compact ? "" : "Waiting "}
       {formatClock(wait)}
     </span>
@@ -72,37 +78,36 @@ export function ConversationList({
   useNow(30_000);
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="border-b border-line px-3 pt-3">
-        <div role="tablist" aria-label="Queues" className="flex gap-0.5 overflow-x-auto">
-          {QUEUE_LABELS.map((q) => (
-            <button
-              key={q.id}
-              type="button"
-              role="tab"
-              aria-selected={queue === q.id}
-              onClick={() => onQueue(q.id)}
-              className={cn(
-                "flex shrink-0 items-center gap-1 border-b-2 px-1.5 pb-2 text-sm font-medium",
-                queue === q.id ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink",
-              )}
-            >
-              {q.label}
-              {counts ? (
-                <span
-                  className={cn(
-                    "type-figures rounded-full px-1.5 text-xs",
-                    q.id === "unassigned" && counts.unassigned > 0 ? "bg-brass text-ink" : "bg-wash text-muted",
-                  )}
-                >
-                  {counts[q.id]}
+      <div className="px-3 pt-4 pb-3">
+        <h1 className="type-heading px-1 text-lg font-semibold">Inbox</h1>
+        <div role="tablist" aria-label="Queues" className="mt-3 grid grid-cols-4 gap-1 rounded-[10px] bg-wash p-1 shadow-[inset_0_0_0_1px_var(--line)]">
+          {QUEUE_LABELS.map((q) => {
+            const selected = queue === q.id;
+            const waiting = q.id === "unassigned" && (counts?.unassigned ?? 0) > 0;
+            return (
+              <button
+                key={q.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => onQueue(q.id)}
+                className={cn(
+                  "flex min-w-0 flex-col items-center rounded-[7px] px-1 py-1.5 transition-colors",
+                  selected ? "bg-surface text-ink shadow-sm" : "text-muted hover:text-ink",
+                )}
+              >
+                <span className={cn("type-figures flex items-center gap-1 text-base leading-tight font-semibold", waiting ? "text-ink" : undefined)}>
+                  {waiting ? <span aria-hidden className="waiting-pulse size-1.5 rounded-full bg-brass" /> : null}
+                  {counts ? counts[q.id] : "0"}
                 </span>
-              ) : null}
-            </button>
-          ))}
+                <span className="w-full truncate text-center text-[11px] font-medium">{q.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
-      <div className="border-b border-line px-3 py-2">
-        <label className="flex items-center gap-2 rounded-[var(--radius-control)] border border-line bg-surface px-2.5 focus-within:border-enamel">
+      <div className="border-b border-line px-3 pb-3">
+        <label className="flex items-center gap-2 rounded-[var(--radius-control)] border border-line-strong bg-surface px-2.5 transition-[border-color,box-shadow] focus-within:border-enamel focus-within:shadow-[0_0_0_3px_var(--enamel-wash)]">
           <Search className="size-4 text-faint" aria-hidden />
           <span className="sr-only">Search conversations</span>
           <input
@@ -132,31 +137,35 @@ export function ConversationList({
                 aria-current={selectedId === item.id ? "true" : undefined}
                 data-conversation-id={item.id}
                 className={cn(
-                  "flex w-full flex-col gap-1 border-b border-line px-3 py-3 text-left transition-colors",
-                  selectedId === item.id ? "bg-wash" : "hover:bg-wash/60",
+                  "relative flex w-full gap-3 border-b border-line px-3 py-3 text-left transition-colors",
+                  selectedId === item.id ? "bg-enamel-wash" : waiting ? "bg-brass-wash/40 hover:bg-brass-wash/70" : "hover:bg-wash",
                 )}
               >
-                <span className="flex items-center gap-2">
-                  <span className={cn("min-w-0 flex-1 truncate text-sm", unreadCount ? "font-bold" : "font-semibold")}>{item.visitorName}</span>
-                  {unreadCount > 0 ? (
-                    <span className="type-figures min-w-5 rounded-full bg-enamel px-1.5 text-center text-xs font-semibold text-white" aria-label={`${unreadCount} unread`}>
-                      {unreadCount}
-                    </span>
-                  ) : null}
-                  <span className="type-figures shrink-0 text-xs text-faint">{formatRelative(item.lastMessageAt)}</span>
-                </span>
-                <span className="line-clamp-2 text-sm text-muted">
-                  {item.lastMessageSender === "agent" ? "Team: " : item.lastMessageSender === "ai" ? "AI: " : ""}
-                  {item.lastMessagePreview ?? item.subject ?? "No messages yet"}
-                </span>
-                <span className="flex flex-wrap items-center gap-1.5">
-                  {waiting ? <SlaChip since={item.handoffRequestedAt!} /> : null}
-                  <StatusBadge item={item} meId={meId} />
-                  {item.csatRating ? (
-                    <Badge tone="outline">
-                      <Star className="size-3" aria-hidden /> {item.csatRating}/5
-                    </Badge>
-                  ) : null}
+                {selectedId === item.id ? <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-enamel" /> : null}
+                <Avatar name={item.visitorName} size={34} tone="wash" className="mt-0.5" />
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="flex items-center gap-2">
+                    <span className={cn("min-w-0 flex-1 truncate text-sm", unreadCount ? "font-bold" : "font-semibold")}>{item.visitorName}</span>
+                    {unreadCount > 0 ? (
+                      <span className="type-figures min-w-5 rounded-full bg-enamel px-1.5 text-center text-xs font-semibold text-white" aria-label={`${unreadCount} unread`}>
+                        {unreadCount}
+                      </span>
+                    ) : null}
+                    <span className="type-figures shrink-0 text-xs text-faint">{formatRelative(item.lastMessageAt)}</span>
+                  </span>
+                  <span className="line-clamp-2 text-[13px] leading-snug text-muted">
+                    {item.lastMessageSender === "agent" ? "Team: " : item.lastMessageSender === "ai" ? "AI: " : ""}
+                    {item.lastMessagePreview ?? item.subject ?? "No messages yet"}
+                  </span>
+                  <span className="flex flex-wrap items-center gap-1.5 empty:hidden">
+                    {waiting ? <SlaChip since={item.handoffRequestedAt!} /> : null}
+                    <StatusBadge item={item} meId={meId} />
+                    {item.csatRating ? (
+                      <Badge tone="outline">
+                        <Star className="size-3" aria-hidden /> {item.csatRating}/5
+                      </Badge>
+                    ) : null}
+                  </span>
                 </span>
               </button>
             </li>

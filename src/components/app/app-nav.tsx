@@ -166,7 +166,7 @@ export function AppNav({
                   active ? "bg-white/12 text-white" : "text-white/65 hover:bg-white/6 hover:text-white",
                 )}
               >
-                {active ? <span aria-hidden className="absolute top-2 bottom-2 -left-3 hidden w-[3px] rounded-r-full bg-brass md:block" /> : null}
+                {active ? <span aria-hidden className="absolute top-2.5 bottom-2.5 left-0 hidden w-[3px] rounded-r-full bg-brass md:block" /> : null}
                 <item.icon className="size-[18px]" aria-hidden />
                 <span className="hidden sm:inline">{item.label}</span>
               </Link>

@@ -153,7 +153,7 @@ export function Composer({
         </div>
       ) : null}
       <div className="mb-2 flex items-center justify-between gap-2">
-        <div role="tablist" aria-label="Composer mode" className="flex gap-1">
+        <div role="tablist" aria-label="Composer mode" className="flex gap-0.5 rounded-[9px] bg-wash p-0.5 shadow-[inset_0_0_0_1px_var(--line)]">
           <button
             type="button"
             role="tab"
@@ -161,8 +161,8 @@ export function Composer({
             disabled={!canReply}
             onClick={() => setMode("reply")}
             className={cn(
-              "rounded-[var(--radius-control)] px-2.5 py-1 text-sm font-medium disabled:opacity-40",
-              mode === "reply" ? "bg-ink text-white" : "text-muted hover:bg-wash",
+              "rounded-[7px] px-3 py-1 text-sm font-medium transition-colors disabled:opacity-40",
+              mode === "reply" ? "bg-surface text-ink shadow-sm" : "text-muted hover:text-ink",
             )}
           >
             Reply
@@ -173,8 +173,8 @@ export function Composer({
             aria-selected={mode === "note"}
             onClick={() => setMode("note")}
             className={cn(
-              "flex items-center gap-1 rounded-[var(--radius-control)] px-2.5 py-1 text-sm font-medium",
-              mode === "note" ? "bg-ink text-white" : "text-muted hover:bg-wash",
+              "flex items-center gap-1 rounded-[7px] px-3 py-1 text-sm font-medium transition-colors",
+              mode === "note" ? "bg-brass text-ink shadow-sm" : "text-muted hover:text-ink",
             )}
           >
             <Lock className="size-3.5" aria-hidden /> Internal note
@@ -203,8 +203,10 @@ export function Composer({
       ) : null}
       <div
         className={cn(
-          "flex items-end gap-2 rounded-[var(--radius-panel)] border px-2 py-1.5",
-          mode === "note" ? "border-dashed border-line-strong bg-wash" : "border-line-strong bg-surface focus-within:border-enamel",
+          "flex items-end gap-2 rounded-[var(--radius-panel)] border px-2 py-1.5 transition-[border-color,box-shadow,background-color]",
+          mode === "note"
+            ? "border-dashed border-[color:var(--brass-strong)] bg-brass-wash focus-within:shadow-[0_0_0_3px_color-mix(in_oklab,var(--brass)_25%,transparent)]"
+            : "border-line-strong bg-surface shadow-sm focus-within:border-enamel focus-within:shadow-[0_0_0_3px_var(--enamel-wash)]",
         )}
       >
         {mode === "reply" ? (

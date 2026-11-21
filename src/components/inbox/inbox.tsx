@@ -140,7 +140,7 @@ export function Inbox({
        
       >
         {!hasKnowledge ? (
-          <Link href="/app/knowledge" className="block border-b border-line bg-brass-wash px-3 py-2 text-sm">
+          <Link href="/app/knowledge" className="block border-b border-line bg-brass-wash px-4 py-2.5 text-sm hover:bg-[color:color-mix(in_oklab,var(--brass)_32%,white)]">
             <span className="font-medium">Add knowledge</span> so the assistant can answer. Until then, every question comes to your team.
           </Link>
         ) : null}
@@ -175,10 +175,12 @@ export function Inbox({
             onOpen={select}
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <EmptyState icon={MessagesSquare} title="Pick a conversation">
-              New conversations and replies appear here live. Waiting customers are marked with a timer.
-            </EmptyState>
+          <div className="dot-grid flex h-full items-center justify-center p-6">
+            <div className="max-w-sm rounded-[var(--radius-panel)] border border-line bg-surface p-2 shadow-md">
+              <EmptyState icon={MessagesSquare} title="Pick a conversation" className="py-6">
+                New conversations and replies appear here live. Customers waiting for a person are marked with a timer that turns brass after two minutes.
+              </EmptyState>
+            </div>
           </div>
         )}
       </section>

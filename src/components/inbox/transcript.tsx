@@ -41,8 +41,8 @@ export function Transcript({
         if (row.type === "note") {
           return (
             <li key={`note-${row.note.id}`} className="rise-in mx-auto w-full max-w-xl">
-              <div className="rounded-[10px] border border-dashed border-line-strong bg-surface px-3 py-2">
-                <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-muted">
+              <div className="rounded-[10px] border border-dashed border-[color:color-mix(in_oklab,var(--brass)_70%,var(--ink))] bg-brass-wash px-3.5 py-2.5">
+                <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-brass-strong">
                   <Lock className="size-3" aria-hidden /> Internal note by {row.note.authorName ?? "a teammate"}. The customer can&apos;t see it.
                 </p>
                 <p className="text-sm">

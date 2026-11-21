@@ -2,7 +2,8 @@ import { and, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessageCircle } from "lucide-react";
+import { BrandGlyph } from "@/components/brand-mark";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
 import { workspaceBySlug } from "@/lib/widget/public";
@@ -30,25 +31,40 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!found) notFound();
   const { workspace, article } = found;
   return (
-    <div className="min-h-dvh">
-      <header className="border-b border-line bg-surface">
+    <div className="flex min-h-dvh flex-col" style={{ ["--brand" as string]: workspace.brandColor }}>
+      <header className="bg-brand text-white">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4 sm:px-6">
-          <Link href={`/s/${slug}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink">
+          <Link href={`/s/${slug}`} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-sm font-medium hover:bg-white/25">
             <ArrowLeft className="size-4" aria-hidden /> {workspace.name} support
           </Link>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-        <h1 className="type-display text-3xl font-semibold">{article.title}</h1>
-        <p className="mt-2 text-sm text-muted">Updated {new Date(article.updatedAt).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" })}</p>
-        <article className="mt-8 max-w-[68ch] text-[16px] leading-[1.7] whitespace-pre-wrap">{article.body}</article>
-        <div className="mt-12 border-t border-line pt-6">
-          <p className="text-sm text-muted">Still need help?</p>
-          <Link href={`/s/${slug}`} className="mt-1 inline-block font-medium hover:underline" style={{ color: workspace.brandColor }}>
-            Ask in the chat
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12 sm:px-6">
+        <h1 className="type-display text-3xl font-semibold sm:text-4xl">{article.title}</h1>
+        <p className="mt-3 text-sm text-muted">
+          Updated {new Date(article.updatedAt).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" })}
+        </p>
+        <article className="mt-8 max-w-[68ch] text-[16px] leading-[1.75] whitespace-pre-wrap">{article.body}</article>
+        <div className="mt-14 flex flex-col items-start gap-4 rounded-[var(--radius-panel)] border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold">Still need help?</p>
+            <p className="mt-0.5 text-sm text-muted">Ask in the chat. You&apos;ll get an answer in seconds, and a person whenever you want one.</p>
+          </div>
+          <Link
+            href={`/s/${slug}`}
+            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-4 text-sm font-medium text-white"
+          >
+            <MessageCircle className="size-4" aria-hidden /> Ask in the chat
           </Link>
         </div>
       </main>
+      <footer className="border-t border-line">
+        <div className="mx-auto flex max-w-3xl items-center justify-end px-4 py-5 text-sm text-muted sm:px-6">
+          <a href="/" className="inline-flex items-center gap-1.5 hover:text-ink">
+            <BrandGlyph size={16} /> Runs on HelpDesk AI
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -8,9 +8,9 @@ import type { DayPoint } from "@/lib/analytics";
  * a table view carry identity and values so nothing relies on color alone.
  */
 const SERIES = [
-  { key: "aiResolved", label: "Resolved by AI", color: "#168062" },
-  { key: "handedOff", label: "Handed to the team", color: "#C48A10" },
-  { key: "open", label: "Still with the assistant", color: "#9AA39E" },
+  { key: "aiResolved", label: "Resolved by AI", color: "#2747C8" },
+  { key: "handedOff", label: "Handed to the team", color: "#C4860F" },
+  { key: "open", label: "Still with the assistant", color: "#A7AFBD" },
 ] as const;
 
 function niceMax(v: number) {

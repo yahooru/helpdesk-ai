@@ -20,9 +20,9 @@ export function CustomerPanel({ detail, onOpen }: { detail: Detail; onOpen: (id:
       ? new Date(conversation.firstHumanResponseAt).getTime() - new Date(conversation.handoffRequestedAt).getTime()
       : null;
   return (
-    <div className="flex flex-col gap-6 px-4 py-5">
+    <div className="flex flex-col gap-5 px-5 py-5">
       <section className="flex items-center gap-3">
-        <Avatar name={visitor.name} size={40} tone="wash" />
+        <Avatar name={visitor.name} size={44} tone="enamel" />
         <div className="min-w-0">
           <p className="truncate font-semibold">{visitor.name}</p>
           {visitor.email ? (
@@ -36,8 +36,8 @@ export function CustomerPanel({ detail, onOpen }: { detail: Detail; onOpen: (id:
         </div>
       </section>
 
-      <section>
-        <h3 className="mb-2 text-xs font-semibold text-muted">Came from</h3>
+      <section className="border-t border-line pt-5">
+        <h3 className="mb-2.5 text-[13px] font-semibold text-ink">Came from</h3>
         {conversation.pageUrl ? (
           <a href={conversation.pageUrl} target="_blank" rel="noreferrer noopener" className="group flex items-start gap-1.5 text-sm">
             <ExternalLink className="mt-0.5 size-3.5 shrink-0 text-muted" aria-hidden />
@@ -54,8 +54,8 @@ export function CustomerPanel({ detail, onOpen }: { detail: Detail; onOpen: (id:
         )}
       </section>
 
-      <section>
-        <h3 className="mb-2 text-xs font-semibold text-muted">This conversation</h3>
+      <section className="border-t border-line pt-5">
+        <h3 className="mb-2.5 text-[13px] font-semibold text-ink">This conversation</h3>
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-sm">
           <dt className="text-muted">Started</dt>
           <dd>{formatDateTime(conversation.createdAt)}</dd>
@@ -86,8 +86,8 @@ export function CustomerPanel({ detail, onOpen }: { detail: Detail; onOpen: (id:
         {conversation.csatComment ? <p className="mt-2 text-sm text-muted">&ldquo;{conversation.csatComment}&rdquo;</p> : null}
       </section>
 
-      <section>
-        <h3 className="mb-2 text-xs font-semibold text-muted">Past conversations</h3>
+      <section className="border-t border-line pt-5">
+        <h3 className="mb-2.5 text-[13px] font-semibold text-ink">Past conversations</h3>
         {past.length === 0 ? (
           <p className="text-sm text-muted">This is their first conversation.</p>
         ) : (
