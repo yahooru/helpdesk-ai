@@ -30,6 +30,43 @@ type ConversationSummary = { id: string; channelId: string; status: "ai" | "queu
 
 export type UiMessage = ChatMessage & { mine: boolean; localKey?: string };
 
+type MirroredMessage = {
+  id: string;
+  senderId: string;
+  senderName?: string;
+  kind: "text" | "image" | "file" | "event" | "csat";
+  text: string;
+  attachment: { url: string; name: string; size?: number } | null;
+  sources: { articleId: string; title: string; isPublic: boolean }[];
+  sentTime: number;
+};
+
+/** System lines are mirrored as text only; recover the bits the chat uses (who joined, no agents). */
+function eventFromText(text: string, conversationId: string): NonNullable<ChatMessage["event"]> {
+  const joined = /^(.+) joined the conversation$/.exec(text);
+  if (joined) return { kind: "agent_joined", text, actorName: joined[1], conversationId };
+  const moved = / transferred the conversation to (.+)$/.exec(text);
+  if (moved) return { kind: "transferred", text, actorName: moved[1], conversationId };
+  if (text.startsWith("No one from the team is online")) return { kind: "no_agents", text, conversationId };
+  return { kind: "started", text, conversationId };
+}
+
+/** Maps the server's mirrored transcript into chat messages (used when Nexconn has no history). */
+function fromMirror(rows: MirroredMessage[], conv: { id: string; channelId: string }, csat: { rating: number | null }, me: string | undefined): UiMessage[] {
+  return rows.map((r): UiMessage => {
+    const base = { id: r.id, channelId: conv.channelId, senderId: r.senderId, senderName: r.senderName, text: r.text, sentTime: r.sentTime, status: "sent" as const, mine: r.senderId === me, metadata: {} as Record<string, string> };
+    if (r.kind === "image" && r.attachment) return { ...base, type: "image", image: { url: r.attachment.url, name: r.attachment.name } };
+    if (r.kind === "file" && r.attachment) return { ...base, type: "file", file: { url: r.attachment.url, name: r.attachment.name, size: r.attachment.size } };
+    if (r.kind === "event") return { ...base, type: "event", event: eventFromText(r.text, conv.id) };
+    if (r.kind === "csat") {
+      const metadata: Record<string, string> = csat.rating ? { state: "done", rating: String(csat.rating) } : { state: "pending" };
+      return { ...base, type: "csat", metadata };
+    }
+    const metadata: Record<string, string> = r.sources.length ? { answer: "done", sources: JSON.stringify(r.sources) } : {};
+    return { ...base, type: "text", metadata };
+  });
+}
+
 const memoryStore = new Map<string, string>();
 function storageGet(key: string): string | null {
   try {
@@ -114,6 +151,20 @@ export function useCustomerChat(workspace: PublicWorkspace, context: { pageUrl: 
     setMessages([]);
     try {
       const page = await loadHistory(conv.channelId, Date.now(), 30);
+      const me = identityRef.current;
+      if (page.messages.length === 0 && me) {
+        // Nexconn has no history for this conversation (it predates the current Nexconn app):
+        // show the transcript the server kept instead.
+        const mirror = await call<{ messages: MirroredMessage[]; csat: { rating: number | null } }>(
+          `/api/widget/conversations/${conv.id}/messages`,
+          me.credential,
+        ).catch(() => null);
+        if (mirror?.messages.length) {
+          setMessages(fromMirror(mirror.messages, conv, mirror.csat, me.nexconnUserId));
+          setHasMore(false);
+          return;
+        }
+      }
       setMessages(page.messages.map((m) => ({ ...m, mine: m.senderId === identityRef.current?.nexconnUserId })));
       setHasMore(page.hasMore);
     } catch {

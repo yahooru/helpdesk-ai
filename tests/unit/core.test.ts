@@ -7,6 +7,7 @@ import { formatClock, formatDuration, slaLevel } from "@/lib/time";
 import { isNexconnId, nexconnId } from "@/lib/ids";
 import { parseVisitorCredential, visitorCredential } from "@/lib/auth/visitor";
 import { titleFromFileName, extensionOf } from "@/lib/knowledge/parse";
+import { packToken, unpackToken } from "@/lib/nexconn/token-cache";
 
 describe("knowledge chunking", () => {
   it("normalizes whitespace and line endings", () => {
@@ -123,5 +124,18 @@ describe("upload helpers", () => {
   it("derives titles and extensions from file names", () => {
     expect(titleFromFileName("refund-policy_v2.md")).toBe("Refund policy v2");
     expect(extensionOf("Guide.PDF")).toBe(".pdf");
+  });
+});
+
+describe("Nexconn token cache", () => {
+  it("returns a cached token only for the App Key that issued it", () => {
+    const stored = packToken("tok@abc|with|bars", "appA");
+    expect(unpackToken(stored, "appA")).toBe("tok@abc|with|bars");
+    expect(unpackToken(stored, "appB")).toBeNull();
+  });
+  it("treats tokens stored by earlier versions, or nothing, as stale", () => {
+    expect(unpackToken("rawTokenFromOldVersion", "appA")).toBeNull();
+    expect(unpackToken(null, "appA")).toBeNull();
+    expect(unpackToken("nx1|appA|", "appA")).toBeNull();
   });
 });
