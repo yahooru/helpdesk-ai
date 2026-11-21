@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, JetBrains_Mono } from "next/font/google";
+import { SITE_DESCRIPTION, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -17,20 +18,39 @@ const code = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: { default: "HelpDesk AI", template: "%s | HelpDesk AI" },
-  description:
-    "Customer support a small business can set up in five minutes: an AI assistant answers from your own help articles and hands the live chat to your team.",
+  description: SITE_DESCRIPTION,
+  applicationName: "HelpDesk AI",
+  openGraph: {
+    type: "website",
+    siteName: "HelpDesk AI",
+    title: "HelpDesk AI: answers in seconds, a person when it matters",
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HelpDesk AI: answers in seconds, a person when it matters",
+    description: SITE_DESCRIPTION,
+  },
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3f4f1",
+  themeColor: "#f4f6f9",
   width: "device-width",
   initialScale: 1,
 };
 
+// Marks the document as scripted before first paint so scroll reveals never hide content without JS.
+const JS_FLAG = "document.documentElement.classList.add('js')";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${code.variable} h-full`}>
+    <html lang="en" className={`${archivo.variable} ${code.variable} h-full`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
+      </head>
       <body className="min-h-full">{children}</body>
     </html>
   );
