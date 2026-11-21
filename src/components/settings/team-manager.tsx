@@ -9,7 +9,7 @@ import { Field, FormError, Input, Select } from "@/components/ui/field";
 import { Badge } from "@/components/ui/misc";
 import { useToast } from "@/components/ui/toast";
 import { api, errorMessage } from "@/lib/api-client";
-import { connectionState, subscribe, subscribePresence } from "@/lib/nexconn/client";
+import { subscribe, subscribePresence } from "@/lib/nexconn/client";
 import { formatRelative } from "@/lib/time";
 
 type Member = {
@@ -53,32 +53,41 @@ export function TeamManager({ meId, canEdit }: { meId: string; canEdit: boolean 
     void load();
   }, [load]);
 
-  // Live presence through Nexconn online-status subscriptions.
+  // Live presence through Nexconn online-status subscriptions. Keyed on the member ids, so a list
+  // reload with the same people keeps the existing subscription.
+  const memberKey = members.map((m) => m.nexconnUserId).join(",");
   useEffect(() => {
-    if (members.length === 0) return;
+    if (!memberKey) return;
+    let started = false;
+    let disposed = false;
     let cleanup: (() => void) | undefined;
     const start = () => {
-      subscribePresence(
-        members.map((m) => m.nexconnUserId),
-        (id, isOnline) => setOnline((o) => ({ ...o, [id]: isOnline })),
-      )
-        .then((c) => (cleanup = c))
-        .catch(() => undefined);
+      if (started) return;
+      started = true;
+      subscribePresence(memberKey.split(","), (id, isOnline) => setOnline((o) => ({ ...o, [id]: isOnline })))
+        .then((c) => {
+          if (disposed) c();
+          else cleanup = c;
+        })
+        .catch(() => {
+          started = false;
+        });
     };
-    if (connectionState() === "connected") start();
+    // subscribe() reports the current state right away, so an open connection starts here too.
     const unsub = subscribe({
       onState: (s) => {
-        if (s === "connected" && !cleanup) start();
+        if (s === "connected") start();
       },
       onInbox: (e) => {
         if (e.kind === "presence") void load();
       },
     });
     return () => {
+      disposed = true;
       unsub();
       cleanup?.();
     };
-  }, [members, load]);
+  }, [memberKey, load]);
 
   async function invite(e: React.FormEvent) {
     e.preventDefault();

@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { WifiOff } from "lucide-react";
 import { api } from "@/lib/api-client";
-import { connectChat, subscribe, type ConnectionState } from "@/lib/nexconn/client";
+import { connectChat, connectionState, subscribe, type ConnectionState } from "@/lib/nexconn/client";
 
 type StaffChat = { state: ConnectionState; myNexconnId: string; staffChannelId: string };
 
@@ -20,6 +20,8 @@ export function StaffChatProvider({ children, myNexconnId, staffChannelId }: { c
       return { appKey: s.appKey, token: s.token, userId: s.userId };
     }).catch(() => undefined);
     const onOnline = () => {
+      // Another tab took this session over; reconnecting here would kick that tab in turn.
+      if (connectionState() === "kicked") return;
       connectChat(async (refresh) => {
         const s = await api<Session>("/api/chat/session", { body: { refresh } });
         return { appKey: s.appKey, token: s.token, userId: s.userId };
