@@ -37,7 +37,9 @@ const logo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 32" role=
 </svg>\n`;
 
 async function png(svg, size) {
-  return sharp(Buffer.from(svg), { density: 72 * (size / 32) * 4 }).resize(size, size).png().toBuffer();
+  // Rasterize well above the target size, then downsample for crisp edges.
+  const sized = svg.replace(/<svg ([^>]*?)(width="\d+" height="\d+" )?viewBox/, `<svg $1width="${size * 4}" height="${size * 4}" viewBox`);
+  return sharp(Buffer.from(sized)).resize(size, size).png().toBuffer();
 }
 
 /** ICO container holding PNG frames (supported by every current browser). */
