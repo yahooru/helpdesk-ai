@@ -69,7 +69,7 @@ export function WidgetApp({
   return (
     <BrandStyle color={workspace.brandColor} className="h-full">
       {open ? (
-        <div className={cn("h-full", embedded ? "p-0 sm:p-3" : "mx-auto max-w-[440px] p-3")}>
+        <div className={cn("h-full", embedded ? "panel-in p-0 sm:p-3" : "mx-auto max-w-[440px] p-3", side === "left" && "origin-bottom-left")}>
           <CustomerChat workspace={workspace} chat={chat} teamOnline={teamOnline} onClose={embedded ? () => setOpen(false) : undefined} variant="widget" />
         </div>
       ) : (
@@ -78,7 +78,7 @@ export function WidgetApp({
             type="button"
             onClick={() => setOpen(true)}
             aria-label={`Chat with ${workspace.name}${chat.unseenCount ? `, ${chat.unseenCount} new` : ""}`}
-            className="relative flex size-14 items-center justify-center rounded-full bg-brand text-brand-ink shadow-[0_10px_24px_-8px_rgba(15,27,45,0.55)] transition-transform hover:scale-105"
+            className="pop-in relative flex size-14 items-center justify-center rounded-full bg-brand text-brand-ink shadow-[0_10px_24px_-8px_rgba(15,27,45,0.55),inset_0_1px_0_rgb(255_255_255/0.2)] transition-transform duration-200 hover:scale-105 active:scale-95"
             data-testid="widget-launcher"
           >
             <MessageCircle className="size-6" aria-hidden />

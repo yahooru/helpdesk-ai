@@ -103,7 +103,7 @@ export default async function SupportPage({ params, searchParams }: { params: Pr
             </ul>
           )}
         </section>
-        <section className="order-1 h-[640px] max-h-[82dvh] lg:sticky lg:top-6 lg:order-2" aria-label="Chat with support">
+        <section className="order-1 h-[640px] max-h-[82dvh] lg:sticky lg:top-6 lg:order-2 lg:-mt-56" aria-label="Chat with support">
           <div className="h-full rounded-[16px] shadow-lg">
             <SupportPageChat workspace={pub} teamOnline={teamOnline} />
           </div>

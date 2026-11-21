@@ -2,7 +2,7 @@ import { desc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ExternalLink } from "lucide-react";
+import { Check, ExternalLink } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { SnippetBlock } from "@/components/copy-button";
 import { KnowledgeStep } from "@/components/onboarding/knowledge-step";
@@ -52,7 +52,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
 
   return (
     <div className="min-h-dvh">
-      <header className="flex items-center justify-between border-b border-line px-4 py-4 sm:px-8">
+      <header className="flex items-center justify-between border-b border-line bg-surface px-4 py-4 sm:px-8">
         <BrandMark href={ctx ? "/app" : "/"} />
         {ctx ? (
           <Link href="/app/inbox" className="text-sm font-medium text-muted hover:text-ink">
@@ -61,25 +61,34 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
         ) : null}
       </header>
       <main className="mx-auto max-w-5xl px-4 py-10 sm:px-8">
-        <ol className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm" aria-label="Setup progress">
+        <ol className="mb-12 flex max-w-xl items-center text-sm" aria-label="Setup progress">
           {STEPS.map((s, i) => (
-            <li key={s.id} className={cn("flex items-center gap-2", i === index ? "text-ink" : i < index ? "text-enamel" : "text-faint")}>
-              <span
-                className={cn(
-                  "type-figures flex size-6 items-center justify-center rounded-full border text-xs font-semibold",
-                  i === index ? "border-ink bg-ink text-white" : i < index ? "border-enamel bg-enamel text-white" : "border-line-strong",
-                )}
-              >
-                {i + 1}
+            <li key={s.id} className={cn("flex items-center", i < STEPS.length - 1 && "flex-1")}>
+              <span className={cn("flex items-center gap-2", i === index ? "text-ink" : i < index ? "text-enamel-strong" : "text-faint")}>
+                <span
+                  className={cn(
+                    "type-figures flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
+                    i === index
+                      ? "border-enamel bg-surface text-enamel shadow-[0_0_0_4px_var(--enamel-wash)]"
+                      : i < index
+                        ? "border-enamel bg-enamel text-white"
+                        : "border-line-strong bg-surface",
+                  )}
+                >
+                  {i < index ? <Check className="size-3.5" aria-hidden /> : i + 1}
+                </span>
+                <span className="font-medium whitespace-nowrap" aria-current={i === index ? "step" : undefined}>
+                  {s.label}
+                </span>
               </span>
-              <span className="font-medium" aria-current={i === index ? "step" : undefined}>
-                {s.label}
-              </span>
+              {i < STEPS.length - 1 ? (
+                <span aria-hidden className={cn("mx-3 h-0.5 flex-1 rounded-full", i < index ? "bg-enamel" : "bg-line-strong")} />
+              ) : null}
             </li>
           ))}
         </ol>
-        <h1 className="type-display text-3xl font-semibold sm:text-4xl">{titles[step].title}</h1>
-        <p className="mt-2 max-w-xl text-muted">{titles[step].body}</p>
+        <h1 className="type-display text-3xl font-semibold sm:text-[2.6rem]">{titles[step].title}</h1>
+        <p className="mt-3 max-w-xl text-[1.0625rem] text-muted">{titles[step].body}</p>
         <div className="mt-10">
           {step === "workspace" ? <WorkspaceStep /> : null}
           {step === "knowledge" ? <KnowledgeStep existing={existing} /> : null}
@@ -106,7 +115,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
               <div className="border-t border-line pt-6">
                 <Link
                   href="/app/inbox"
-                  className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-enamel px-5 font-medium text-white hover:bg-enamel-strong"
+                  className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-enamel px-5 font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.16),0_1px_2px_rgb(15_27_45/0.18)] hover:bg-enamel-strong"
                 >
                   Open my inbox
                 </Link>

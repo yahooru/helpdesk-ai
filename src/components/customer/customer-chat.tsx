@@ -50,8 +50,11 @@ function IntroForm({ chat }: { chat: CustomerChatState }) {
     }
   }
   return (
-    <form onSubmit={submit} className="mx-4 mb-4 flex flex-col gap-3 rounded-[12px] border border-line bg-surface p-4" noValidate>
-      <p className="text-sm font-medium">Before we start, what&apos;s your name?</p>
+    <form onSubmit={submit} className="pop-in mx-4 mb-4 flex flex-col gap-3 rounded-[14px] border border-line bg-surface p-4 shadow-md" noValidate>
+      <div>
+        <p className="font-semibold">Before we start, what&apos;s your name?</p>
+        <p className="mt-0.5 text-xs text-muted">So the team knows who they&apos;re talking to if you ask for a person.</p>
+      </div>
       {err ? (
         <p role="alert" className="text-sm text-ink">
           <span className="mr-1.5 inline-block size-2 rounded-full bg-brass align-middle" aria-hidden />
@@ -65,7 +68,7 @@ function IntroForm({ chat }: { chat: CustomerChatState }) {
           onChange={(e) => setName(e.target.value)}
           autoComplete="name"
           maxLength={64}
-          className="h-10 rounded-[8px] border border-line-strong bg-surface px-3 text-base focus:border-[var(--brand)] focus:outline-none"
+          className="h-10 rounded-[8px] border border-line-strong bg-surface px-3 text-base transition-[border-color,box-shadow] focus:border-[var(--brand)] focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--brand)_15%,transparent)] focus:outline-none"
           aria-label="Your name"
         />
       </label>
@@ -78,7 +81,7 @@ function IntroForm({ chat }: { chat: CustomerChatState }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
-          className="h-10 rounded-[8px] border border-line-strong bg-surface px-3 text-base focus:border-[var(--brand)] focus:outline-none"
+          className="h-10 rounded-[8px] border border-line-strong bg-surface px-3 text-base transition-[border-color,box-shadow] focus:border-[var(--brand)] focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--brand)_15%,transparent)] focus:outline-none"
           aria-label="Your email (optional)"
         />
       </label>
@@ -286,7 +289,7 @@ export function CustomerChat({
     <div
       className={cn(
         "flex h-full min-h-0 flex-col overflow-hidden bg-canvas text-ink",
-        variant === "widget" ? "rounded-[16px] border border-line-strong shadow-[0_24px_60px_-20px_rgba(15,27,45,0.45)]" : "rounded-[14px] border border-line-strong",
+        variant === "widget" ? "rounded-[18px] border border-line shadow-[0_24px_60px_-20px_rgba(15,27,45,0.45)]" : "rounded-[16px] border border-line",
       )}
     >
       <header className="flex items-center gap-3 bg-brand px-4 py-3.5 text-brand-ink">
