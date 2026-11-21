@@ -35,12 +35,12 @@ export function Dialog({
       }}
       aria-labelledby="dialog-title"
       className={cn(
-        "m-auto w-[min(520px,calc(100vw-32px))] rounded-[var(--radius-panel)] border border-line-strong bg-surface p-0 text-ink shadow-[0_18px_48px_-12px_rgba(29,38,34,0.35)] backdrop:bg-[rgba(29,38,34,0.38)]",
+        "pop-in m-auto w-[min(520px,calc(100vw-32px))] rounded-[var(--radius-panel)] border border-line bg-surface p-0 text-ink shadow-lg backdrop:bg-[rgb(15_27_45/0.42)] backdrop:backdrop-blur-[2px]",
         className,
       )}
     >
       {open ? (
-        <div className="p-5">
+        <div className="p-6">
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
               <h2 id="dialog-title" className="type-heading text-lg font-semibold">

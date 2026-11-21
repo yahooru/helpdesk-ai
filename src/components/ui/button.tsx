@@ -6,10 +6,11 @@ type Variant = "primary" | "secondary" | "ghost" | "ink" | "quiet";
 type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-enamel text-white hover:bg-enamel-strong border border-transparent",
-  secondary: "bg-surface text-ink border border-line-strong hover:bg-wash",
+  primary:
+    "bg-enamel text-white border border-transparent shadow-[inset_0_1px_0_rgb(255_255_255/0.16),0_1px_2px_rgb(15_27_45/0.18)] hover:bg-enamel-strong",
+  secondary: "bg-surface text-ink border border-line-strong shadow-sm hover:border-[color:var(--faint)] hover:bg-wash",
   ghost: "bg-transparent text-ink border border-transparent hover:bg-wash",
-  ink: "bg-ink text-white border border-transparent hover:opacity-90",
+  ink: "bg-ink text-white border border-transparent shadow-[inset_0_1px_0_rgb(255_255_255/0.1)] hover:bg-ink-raised",
   quiet: "bg-transparent text-muted border border-transparent hover:text-ink hover:bg-wash",
 };
 
@@ -36,7 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        "inline-flex select-none items-center justify-center whitespace-nowrap rounded-[var(--radius-control)] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-55",
+        "inline-flex select-none items-center justify-center whitespace-nowrap rounded-[var(--radius-control)] font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-150 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-55 disabled:active:translate-y-0",
         variants[variant],
         sizes[size],
         className,

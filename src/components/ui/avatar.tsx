@@ -47,7 +47,7 @@ export function Avatar({
         <span
           className={cn(
             "absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-surface",
-            online ? "bg-enamel" : "bg-[color:var(--faint)]",
+            online ? "bg-fern" : "bg-[color:var(--faint)]",
           )}
           style={{ width: Math.max(9, size * 0.3), height: Math.max(9, size * 0.3) }}
           aria-label={online ? "Online" : "Offline"}

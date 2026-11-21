@@ -102,7 +102,7 @@ export function AppNav({
           <ChevronsUpDown className="hidden size-4 text-muted md:block" aria-hidden />
         </button>
         {menu ? (
-          <div role="menu" className="rise-in absolute left-0 z-30 mt-1 w-64 rounded-[var(--radius-panel)] border border-line-strong bg-surface p-1.5 shadow-[0_14px_32px_-12px_rgba(29,38,34,0.3)]">
+          <div role="menu" className="rise-in absolute left-0 z-30 mt-1 w-64 rounded-[var(--radius-panel)] border border-line-strong bg-surface p-1.5 shadow-[0_14px_32px_-12px_rgba(15,27,45,0.3)]">
             <div className="flex items-center gap-2 px-2 py-2">
               <Avatar name={user.name} size={28} />
               <div className="min-w-0">

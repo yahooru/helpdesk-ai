@@ -85,7 +85,7 @@ export function AddKnowledge({
               }}
               className={cn(
                 "inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-[5px] px-3 text-sm font-medium transition-colors",
-                mode === m.id ? "bg-surface text-ink shadow-[0_1px_2px_rgba(29,38,34,0.12)]" : "text-muted hover:text-ink",
+                mode === m.id ? "bg-surface text-ink shadow-[0_1px_2px_rgba(15,27,45,0.12)]" : "text-muted hover:text-ink",
               )}
             >
               <m.icon className="size-4" aria-hidden />

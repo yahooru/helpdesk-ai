@@ -43,7 +43,7 @@ export function BrandSwatches({ value, onChange }: { value: string; onChange: (h
 /** Small live preview of the customer-facing chat header. */
 export function WidgetPreview({ name, color, greeting, logo }: { name: string; color: string; greeting: string; logo: string | null }) {
   return (
-    <div className="w-full max-w-[320px] overflow-hidden rounded-[14px] border border-line-strong bg-surface shadow-[0_18px_40px_-18px_rgba(29,38,34,0.35)]">
+    <div className="w-full max-w-[320px] overflow-hidden rounded-[14px] border border-line-strong bg-surface shadow-[0_18px_40px_-18px_rgba(15,27,45,0.35)]">
       <div className="flex items-center gap-3 px-4 py-4 text-white" style={{ background: color }}>
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element

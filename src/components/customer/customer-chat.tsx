@@ -286,7 +286,7 @@ export function CustomerChat({
     <div
       className={cn(
         "flex h-full min-h-0 flex-col overflow-hidden bg-canvas text-ink",
-        variant === "widget" ? "rounded-[16px] border border-line-strong shadow-[0_24px_60px_-20px_rgba(29,38,34,0.45)]" : "rounded-[14px] border border-line-strong",
+        variant === "widget" ? "rounded-[16px] border border-line-strong shadow-[0_24px_60px_-20px_rgba(15,27,45,0.45)]" : "rounded-[14px] border border-line-strong",
       )}
     >
       <header className="flex items-center gap-3 bg-brand px-4 py-3.5 text-brand-ink">

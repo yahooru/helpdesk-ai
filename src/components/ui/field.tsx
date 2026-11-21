@@ -2,7 +2,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAt
 import { cn } from "@/lib/cn";
 
 const control =
-  "w-full rounded-[var(--radius-control)] border border-line-strong bg-surface px-3 text-base text-ink placeholder:text-faint transition-colors hover:border-[color:var(--faint)] focus:border-enamel focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-enamel aria-[invalid=true]:border-ink disabled:opacity-60";
+  "w-full rounded-[var(--radius-control)] border border-line-strong bg-surface px-3 text-base text-ink shadow-[inset_0_1px_1px_rgb(15_27_45/0.04)] placeholder:text-faint transition-[border-color,box-shadow] hover:border-[color:var(--faint)] focus:border-enamel focus:shadow-[0_0_0_3px_var(--enamel-wash)] focus:outline-none focus-visible:outline-none aria-[invalid=true]:border-brass-strong aria-[invalid=true]:shadow-[0_0_0_3px_var(--brass-wash)] disabled:opacity-60";
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Input(
   { className, ...rest },
@@ -51,8 +51,8 @@ export function Field({
       </label>
       {children}
       {error ? (
-        <p id={`${htmlFor}-error`} role="alert" className="text-sm font-medium text-ink">
-          <span className="mr-1.5 inline-block size-2 rounded-full bg-brass align-middle" aria-hidden />
+        <p id={`${htmlFor}-error`} role="alert" className="flex items-center text-sm font-medium text-ink">
+          <span className="mr-1.5 inline-block size-2 shrink-0 rounded-full bg-brass" aria-hidden />
           {error}
         </p>
       ) : hint ? (
@@ -67,8 +67,9 @@ export function Field({
 export function FormError({ message }: { message?: string | null }) {
   if (!message) return null;
   return (
-    <div role="alert" className="rounded-[var(--radius-control)] border border-line-strong bg-brass-wash px-3 py-2 text-sm text-ink">
-      {message}
+    <div role="alert" className="flex items-start gap-2 rounded-[var(--radius-control)] border border-[color:color-mix(in_oklab,var(--brass)_45%,transparent)] bg-brass-wash px-3 py-2.5 text-sm text-ink">
+      <span className="mt-1.5 inline-block size-2 shrink-0 rounded-full bg-brass" aria-hidden />
+      <span>{message}</span>
     </div>
   );
 }

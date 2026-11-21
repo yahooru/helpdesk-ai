@@ -78,7 +78,7 @@ export function WidgetApp({
             type="button"
             onClick={() => setOpen(true)}
             aria-label={`Chat with ${workspace.name}${chat.unseenCount ? `, ${chat.unseenCount} new` : ""}`}
-            className="relative flex size-14 items-center justify-center rounded-full bg-brand text-brand-ink shadow-[0_10px_24px_-8px_rgba(29,38,34,0.55)] transition-transform hover:scale-105"
+            className="relative flex size-14 items-center justify-center rounded-full bg-brand text-brand-ink shadow-[0_10px_24px_-8px_rgba(15,27,45,0.55)] transition-transform hover:scale-105"
             data-testid="widget-launcher"
           >
             <MessageCircle className="size-6" aria-hidden />

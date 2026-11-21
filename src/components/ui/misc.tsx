@@ -2,12 +2,13 @@ import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-type Tone = "neutral" | "ledger" | "marker" | "ink" | "outline";
+type Tone = "neutral" | "enamel" | "fern" | "brass" | "ink" | "outline";
 
 const tones: Record<Tone, string> = {
-  neutral: "bg-wash text-ink",
-  ledger: "bg-enamel-wash text-enamel-strong",
-  marker: "bg-brass text-ink",
+  neutral: "bg-wash text-ink shadow-[inset_0_0_0_1px_var(--line)]",
+  enamel: "bg-enamel-wash text-enamel-strong",
+  fern: "bg-fern-wash text-fern",
+  brass: "bg-brass-wash text-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--brass)_50%,transparent)]",
   ink: "bg-ink text-white",
   outline: "border border-line-strong text-muted",
 };
@@ -35,7 +36,7 @@ export function EmptyState({
 }) {
   return (
     <div className={cn("flex flex-col items-start gap-3 px-6 py-10", className)}>
-      <span className="flex size-10 items-center justify-center rounded-full border border-line bg-surface text-muted">
+      <span className="flex size-11 items-center justify-center rounded-[12px] bg-enamel-wash text-enamel shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--enamel)_14%,transparent)]">
         <Icon className="size-5" aria-hidden />
       </span>
       <div className="max-w-sm">
@@ -48,15 +49,15 @@ export function EmptyState({
 }
 
 export function Panel({ children, className }: { children: ReactNode; className?: string }) {
-  return <section className={cn("rounded-[var(--radius-panel)] border border-line bg-surface", className)}>{children}</section>;
+  return <section className={cn("rounded-[var(--radius-panel)] border border-line bg-surface shadow-sm", className)}>{children}</section>;
 }
 
 export function PageHeader({ title, description, actions }: { title: string; description?: ReactNode; actions?: ReactNode }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">
+    <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
       <div className="max-w-2xl">
-        <h1 className="type-heading text-2xl font-semibold">{title}</h1>
-        {description ? <p className="mt-1 text-sm text-muted">{description}</p> : null}
+        <h1 className="type-display text-[1.75rem] font-semibold sm:text-[2rem]">{title}</h1>
+        {description ? <p className="mt-2 text-[0.9375rem] text-muted">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </header>

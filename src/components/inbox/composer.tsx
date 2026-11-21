@@ -121,7 +121,7 @@ export function Composer({
   return (
     <div className="relative border-t border-line bg-surface px-3 pt-2 pb-3 sm:px-4">
       {showReplies ? (
-        <div className="rise-in absolute right-3 bottom-full left-3 z-20 mb-2 max-h-72 overflow-hidden rounded-[var(--radius-panel)] border border-line-strong bg-surface shadow-[0_14px_32px_-12px_rgba(29,38,34,0.3)]">
+        <div className="rise-in absolute right-3 bottom-full left-3 z-20 mb-2 max-h-72 overflow-hidden rounded-[var(--radius-panel)] border border-line-strong bg-surface shadow-[0_14px_32px_-12px_rgba(15,27,45,0.3)]">
           <div className="flex items-center gap-2 border-b border-line px-3 py-2">
             <input
               autoFocus
