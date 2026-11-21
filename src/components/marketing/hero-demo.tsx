@@ -98,10 +98,12 @@ export function HeroDemo() {
   const fading = running && t > LOOP_MS - 700;
 
   return (
-    <div ref={rootRef} className="relative mx-auto w-full max-w-[640px]" aria-label="A customer conversation moving from the AI assistant to a person" role="img">
-      <div className={cn("relative h-[540px] transition-opacity duration-500 sm:h-[560px]", fading ? "opacity-0" : "opacity-100")} aria-hidden>
+    <div ref={rootRef} className="relative mx-auto w-full max-w-[690px]" aria-label="A customer conversation moving from the AI assistant to a person" role="img">
+      <div className={cn("relative h-[540px] transition-opacity duration-500 sm:h-[590px]", fading ? "opacity-0" : "opacity-100")} aria-hidden>
         {/* The agent's side: the inbox, sitting behind the customer's chat. */}
-        <div className="absolute top-6 left-0 hidden w-[300px] overflow-hidden rounded-[16px] border border-line bg-surface shadow-md sm:block">
+        <p className="absolute top-0 left-1 hidden text-xs font-medium text-muted sm:block">What your agent sees</p>
+        <p className="absolute top-0 right-1 hidden text-xs font-medium text-muted sm:block">What your customer sees</p>
+        <div className="absolute top-14 left-0 hidden w-[292px] overflow-hidden rounded-[16px] border border-line bg-surface shadow-md sm:block">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <span className="type-heading text-sm font-semibold">Inbox</span>
             <span className="flex items-center gap-1.5 text-xs text-muted">
@@ -161,7 +163,7 @@ export function HeroDemo() {
         </div>
 
         {/* The customer's side: the chat widget. */}
-        <div className="absolute top-0 right-0 flex h-full w-full flex-col overflow-hidden rounded-[20px] border border-line bg-canvas shadow-lg sm:w-[380px]">
+        <div className="absolute top-0 right-0 bottom-0 flex w-full flex-col overflow-hidden rounded-[20px] border border-line bg-canvas shadow-lg sm:top-7 sm:w-[372px]">
           <div className="flex items-center gap-3 bg-enamel px-4 py-3.5 text-white">
             <span className="flex size-9 items-center justify-center rounded-full bg-white/18 text-sm font-semibold">N</span>
             <div className="min-w-0 flex-1">

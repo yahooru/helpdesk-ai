@@ -176,38 +176,41 @@ export default async function Home() {
         {/* Hero */}
         <section className="relative">
           <div aria-hidden className="dot-grid absolute inset-x-0 top-0 h-[720px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-          <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-14 pb-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,600px)] lg:gap-10 lg:pt-20 lg:pb-28">
-            <div>
-              <h1 className="type-display text-[2.6rem] font-semibold sm:text-6xl lg:text-[4.1rem]">
-                Answers in seconds. A person when it matters.
-              </h1>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-                HelpDesk AI answers your customers from your own help articles, cites the source, and hands the same live chat to your team
-                the moment someone asks for a person. Set it up in about five minutes.
-              </p>
-              <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link
-                  href={primaryHref}
-                  className="inline-flex h-12 items-center rounded-[10px] bg-enamel px-6 text-base font-semibold text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_10px_24px_-10px_var(--enamel)] transition-[background-color,transform] hover:-translate-y-px hover:bg-enamel-strong"
-                >
-                  {primaryLabel}
-                </Link>
-                <a
-                  href="#how-it-works"
-                  className="inline-flex h-12 items-center rounded-[10px] border border-line-strong bg-surface px-5 text-base font-medium shadow-sm transition-colors hover:bg-wash"
-                >
-                  See how it works
-                </a>
+          <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-20 sm:px-6 lg:pt-20 lg:pb-28">
+            <h1 className="type-display max-w-5xl text-[2.6rem] font-semibold text-balance sm:text-6xl lg:text-[4.4rem]">
+              <span className="block">Answers in seconds.</span>
+              <span className="block">A person when it matters.</span>
+            </h1>
+            <div className="mt-10 grid items-start gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,690px)] lg:gap-12">
+              <div className="lg:pt-6">
+                <p className="max-w-md text-lg leading-relaxed text-muted">
+                  HelpDesk AI answers your customers from your own help articles, cites the source, and hands the same live chat to your
+                  team the moment someone asks for a person. Set it up in about five minutes.
+                </p>
+                <div className="mt-9 flex flex-wrap items-center gap-3">
+                  <Link
+                    href={primaryHref}
+                    className="inline-flex h-12 items-center rounded-[10px] bg-enamel px-6 text-base font-semibold text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_10px_24px_-10px_var(--enamel)] transition-[background-color,transform] hover:-translate-y-px hover:bg-enamel-strong"
+                  >
+                    {primaryLabel}
+                  </Link>
+                  <a
+                    href="#how-it-works"
+                    className="inline-flex h-12 items-center rounded-[10px] border border-line-strong bg-surface px-5 text-base font-medium shadow-sm transition-colors hover:bg-wash"
+                  >
+                    See how it works
+                  </a>
+                </div>
+                <ul className="mt-8 flex flex-col gap-2.5 text-sm text-muted">
+                  {["Free to start, no credit card", "Live on your site in about five minutes", "Works on any website, or none at all"].map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <Check className="size-4 text-fern" aria-hidden /> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
-                {["Free to start, no card", "Live in five minutes", "Works on any website"].map((item) => (
-                  <li key={item} className="flex items-center gap-1.5">
-                    <Check className="size-4 text-fern" aria-hidden /> {item}
-                  </li>
-                ))}
-              </ul>
+              <HeroDemo />
             </div>
-            <HeroDemo />
           </div>
         </section>
 
