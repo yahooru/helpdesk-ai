@@ -7,7 +7,7 @@ import { Field, FormError, Input, Textarea } from "@/components/ui/field";
 import { api, errorMessage } from "@/lib/api-client";
 import { BRAND_SWATCHES, DEFAULT_BRAND } from "@/lib/brand";
 import { cn } from "@/lib/cn";
-import { slugify } from "@/lib/slug";
+import { slugDraft, slugify } from "@/lib/slug";
 
 const DEFAULT_GREETING = "Hi there. Ask us anything and we'll get you an answer right away.";
 
@@ -70,7 +70,7 @@ export function WorkspaceStep() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [slugInput, setSlugInput] = useState<string | null>(null);
-  const slug = slugInput ?? slugify(name);
+  const slug = slugify(slugInput ?? name);
   const [check, setCheck] = useState<{ slug: string; available: boolean | null; reason: string | null } | null>(null);
   const slugState = {
     checking: Boolean(slug) && check?.slug !== slug,
@@ -143,8 +143,9 @@ export function WorkspaceStep() {
             <span className="flex items-center border-r border-line bg-wash px-3 text-sm text-muted">/s/</span>
             <input
               id="ws-slug"
-              value={slug}
-              onChange={(e) => setSlugInput(slugify(e.target.value))}
+              value={slugInput ?? slug}
+              onChange={(e) => setSlugInput(slugDraft(e.target.value))}
+              onBlur={() => slugInput !== null && setSlugInput(slugify(slugInput))}
               className="h-10 w-full bg-transparent px-3 text-base focus:outline-none"
               aria-invalid={slugState.available === false}
               maxLength={40}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FormError, Input, Textarea } from "@/components/ui/field";
 import { useToast } from "@/components/ui/toast";
 import { api, errorMessage } from "@/lib/api-client";
-import { slugify } from "@/lib/slug";
+import { slugDraft, slugify } from "@/lib/slug";
 
 type W = { id: string; name: string; slug: string; brandColor: string; greeting: string; logoUrl: string | null };
 
@@ -28,7 +28,7 @@ export function WorkspaceForm({ workspace, canEdit }: { workspace: W; canEdit: b
     setSaving(true);
     setError(null);
     try {
-      await api("/api/workspace", { method: "PATCH", body: { name: name.trim(), slug, brandColor: color, greeting: greeting.trim() } });
+      await api("/api/workspace", { method: "PATCH", body: { name: name.trim(), slug: slugify(slug), brandColor: color, greeting: greeting.trim() } });
       toast("Saved workspace settings");
       router.refresh();
     } catch (err) {
@@ -80,7 +80,8 @@ export function WorkspaceForm({ workspace, canEdit }: { workspace: W; canEdit: b
             <input
               id="set-slug"
               value={slug}
-              onChange={(e) => setSlug(slugify(e.target.value))}
+              onChange={(e) => setSlug(slugDraft(e.target.value))}
+              onBlur={() => setSlug(slugify(slug))}
               disabled={!canEdit}
               className="h-10 w-full bg-transparent px-3 text-base focus:outline-none"
               maxLength={40}

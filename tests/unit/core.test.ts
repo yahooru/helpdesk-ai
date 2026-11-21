@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { chunkArticle, chunkText, normalizeText } from "@/lib/knowledge/chunk";
 import { citedSourceNumbers, isNoAnswer, looksLikeHumanRequest, mayBeNoAnswer, answerSystemPrompt } from "@/lib/ai/prompts";
 import { BRAND_SWATCHES, contrastRatio, isBrandColor } from "@/lib/brand";
-import { isValidSlug, slugify } from "@/lib/slug";
+import { isValidSlug, slugDraft, slugify } from "@/lib/slug";
 import { formatClock, formatDuration, slaLevel } from "@/lib/time";
 import { isNexconnId, nexconnId } from "@/lib/ids";
 import { parseVisitorCredential, visitorCredential } from "@/lib/auth/visitor";
@@ -137,5 +137,15 @@ describe("Nexconn token cache", () => {
     expect(unpackToken("rawTokenFromOldVersion", "appA")).toBeNull();
     expect(unpackToken(null, "appA")).toBeNull();
     expect(unpackToken("nx1|appA|", "appA")).toBeNull();
+  });
+});
+
+describe("slug typing", () => {
+  it("keeps a trailing dash while typing so dashes can be typed one key at a time", () => {
+    let value = "";
+    for (const ch of "northwind-bikes") value = slugDraft(value + ch);
+    expect(value).toBe("northwind-bikes");
+    expect(slugDraft("My Shop-")).toBe("my-shop-");
+    expect(slugify(slugDraft("My Shop-"))).toBe("my-shop");
   });
 });
